@@ -1,0 +1,24 @@
+============================================================================
+               Parallel Programming, COMS4130, Fall 2012
+
+                                 MILETONE 2: 
+Functional and performance tests on serial version of Hopscotch hashing
+
+Daniel Perlmutter <dperlmut@gmail.com>
+Joaquín Ruales <joaqo182@gmail.com>
+Wen-Hsiang Shaw <wenhsiang.Shaw@gmail.com>
+============================================================================
+
+Functional test:
+
+Usage: ./functests <num Adds> <num Removes>
+
+Note: functests performs lookups on all the input entries both before and after remove operations. It prints nothing if the functional test succeeds. The maximum number of insertions we have tested and succeeded is 1 million.
+
+
+Performance test:
+
+Usage: ./perftests <num Operations> <%Adds> <%Removes>
+
+Note: %Lookups = 1 - %Adds - %Removes
+preftests compares performance of our hashmap and X10 built-in hashmap in terms of time cost of adds, removals of random entries, and random lookups before/after those removals.
