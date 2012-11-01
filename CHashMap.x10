@@ -6,6 +6,8 @@
 */
 
 import x10.io.Console;
+import x10.util.concurrent.Lock;
+import x10.util.Timer;
 
 public class CHashMap[K, V] {
   private static val DEFAULT_NUM_BUCKETS = 128;
@@ -227,7 +229,10 @@ class CEntry[K, V] {
   private var key:K;
   private var value:V;
   private var bitmap:Rail[Boolean];
+  private var lock:Lock = new Lock();
+  private var timestamp:Long;
   public var isNull:Boolean = false;
+  public var isBusy:Boolean = false;
 
   //========= class methods =========
   
@@ -239,6 +244,7 @@ class CEntry[K, V] {
     for (var index:Int = 0; index < CHashMap.NEIGHBORHOOD_SIZE; index++) {
       bitmap(index) = false;
     }
+    timestamp = Timer.nanoTimer();
   }
 
   public def getKey():K {
