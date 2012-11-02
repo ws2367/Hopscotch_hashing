@@ -110,47 +110,48 @@ public class CHashMap[K, V] {
 
   //Adds a given key and value to the hash table
   public def add(key:K, value:V) {
-  //Console.OUT.println();
 
-    val bucket = getBucketIndexFromKey(key);
-    var currentBucket:Int = bucket;
-    if(isDebugging) Console.OUT.println("TRYING TO ADD TO BUCKET " + bucket + " VALUE " + value);
+    atomic {
+      val bucket = getBucketIndexFromKey(key);
+      var currentBucket:Int = bucket;
+      if(isDebugging) Console.OUT.println("TRYING TO ADD TO BUCKET " + bucket + " VALUE " + value);
     
     
-    //Check if key is already in the HashMap, then replace value if it is
-    val actualBucketOrSomething = getActualBucket(key);
-    if(actualBucketOrSomething!=-1){
-      buckets(actualBucketOrSomething).setValue(value);
-      return;
-    }
-
-    //Find an empty bucket
-    while (currentBucket < buckets.size && !empty(currentBucket)) {
-      currentBucket++;
-    }
-
-    //Hop the empty bucket back and place the new entry in it
-    if (currentBucket >= buckets.size) {
-      grow();
-      add(key, value);
-    } else if (currentBucket < bucket + NEIGHBORHOOD_SIZE) {
-      buckets(currentBucket) = new CEntry[K,V](key, value);
-      buckets(bucket).setBit(currentBucket - bucket, true);
-      if(isDebugging) Console.OUT.println("ADDED TO " + currentBucket + " with value " + buckets(currentBucket).getValue());
-    } else {
-      while(currentBucket != bucket) {
-        currentBucket = hop(bucket, currentBucket);
-        if (currentBucket == -1) {
-          grow();
-          add(key, value);
-          return;
-          //currentBucket = bucket;
-        }
+      //Check if key is already in the HashMap, then replace value if it is
+      val actualBucketOrSomething = getActualBucket(key);
+      if(actualBucketOrSomething!=-1){
+        buckets(actualBucketOrSomething).setValue(value);
+        return;
       }
-      buckets(bucket).setKey(key);
-      buckets(bucket).setValue(value);
-      buckets(bucket).setBit(0, true);
-      if(isDebugging) Console.OUT.println("ADDED TOO " + bucket + " with value "+ buckets(bucket).getValue());
+
+      //Find an empty bucket
+      while (currentBucket < buckets.size && !empty(currentBucket)) {
+        currentBucket++;
+      }
+
+      //Hop the empty bucket back and place the new entry in it
+      if (currentBucket >= buckets.size) {
+        grow();
+        add(key, value);
+      } else if (currentBucket < bucket + NEIGHBORHOOD_SIZE) {
+        buckets(currentBucket) = new CEntry[K,V](key, value);
+        buckets(bucket).setBit(currentBucket - bucket, true);
+        if(isDebugging) Console.OUT.println("ADDED TO " + currentBucket + " with value " + buckets(currentBucket).getValue());
+      } else {
+        while(currentBucket != bucket) {
+          currentBucket = hop(bucket, currentBucket);
+          if (currentBucket == -1) {
+            grow();
+            add(key, value);
+            return;
+            //currentBucket = bucket;
+          }
+        }
+        buckets(bucket).setKey(key);
+        buckets(bucket).setValue(value);
+        buckets(bucket).setBit(0, true);
+        if(isDebugging) Console.OUT.println("ADDED TOO " + bucket + " with value "+ buckets(bucket).getValue());
+      }
     }                      
   }
 
@@ -170,27 +171,29 @@ public class CHashMap[K, V] {
 
   //Returns the value associated with the given key, or null if nonexistent
   public def get(key:K) {
-    val actualBucket<:Int = getActualBucket(key);
-    return (actualBucket==-1)?null:buckets(actualBucket).getValue();
+    atomic {
+      val actualBucket<:Int = getActualBucket(key);
+      return (actualBucket==-1)?null:buckets(actualBucket).getValue();
+    }
   }
 
   //Removes the entry with the given key from the hash table.
   //Returns the value associated with the removed key or null if no entry has the given key
   public def remove(key:K) {
-    val virtualBucket = getBucketIndexFromKey(key);
-    //if(isDebugging) Console.OUT.println("virtual bucket:"+virtualBucket + " "+((buckets(virtualBucket)==null)?"OMG virtual bucket's null yo!":""));
-    if(isDebugging) Console.OUT.println("TRYING TO REMOVE KEY " + key);
-    val actualBucket = getActualBucket(key);
-    if(actualBucket ==-1){
-    	if(isDebugging) Console.OUT.println("KEY NOT FOUND");
-      return null;
-    } else {
-      //if(isDebugging) Console.OUT.println("actual bucket:"+actualBucket + " "+((buckets(actualBucket)==null)?"OMG actual bucket's null yo!":""));
-      buckets(virtualBucket).setBit(actualBucket - virtualBucket, false);
-      val value = buckets(actualBucket).getValue();
-      buckets(actualBucket).isNull = true;
-      if(isDebugging) Console.OUT.println("KEY REMOVED");
-      return value;
+    atomic {
+      val virtualBucket = getBucketIndexFromKey(key);
+      if(isDebugging) Console.OUT.println("TRYING TO REMOVE KEY " + key);
+        val actualBucket = getActualBucket(key);
+      if(actualBucket ==-1){
+    	  if(isDebugging) Console.OUT.println("KEY NOT FOUND");
+        return null;
+      } else {
+        buckets(virtualBucket).setBit(actualBucket - virtualBucket, false);
+        val value = buckets(actualBucket).getValue();
+        buckets(actualBucket).isNull = true;
+        if(isDebugging) Console.OUT.println("KEY REMOVED");
+        return value;
+      }
     }
   }
 
@@ -244,7 +247,7 @@ class CEntry[K, V] {
     for (var index:Int = 0; index < CHashMap.NEIGHBORHOOD_SIZE; index++) {
       bitmap(index) = false;
     }
-    timestamp = Timer.nanoTimer();
+    timestamp = Timer.nanoTime();
   }
 
   public def getKey():K {
