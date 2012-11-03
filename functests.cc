@@ -367,17 +367,17 @@ class functests__closure__5 : public x10::lang::Closure {
                                                                                    (__extension__ ({
                                                                                        
                                                                                        //#line 416 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                                                                                       x10_int i10210 =
+                                                                                       x10_int i10176 =
                                                                                          r;
                                                                                        
                                                                                        //#line 415 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                                                                                       x10::util::Pair<x10_int, x10_int> ret10211;
+                                                                                       x10::util::Pair<x10_int, x10_int> ret10177;
                                                                                        
                                                                                        //#line 419 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-                                                                                       ret10211 =
+                                                                                       ret10177 =
                                                                                          (x10aux::nullCheck(inputs)->
-                                                                                            FMGL(raw))->__apply(i10210);
-                                                                                       ret10211;
+                                                                                            FMGL(raw))->__apply(i10176);
+                                                                                       ret10177;
                                                                                    }))
                                                                                    ->
                                                                                      FMGL(second))))
@@ -388,17 +388,17 @@ class functests__closure__5 : public x10::lang::Closure {
                   ((((((x10aux::string_utils::lit("Wrong value removed. Expected value: ")) + ((__extension__ ({
                                                                                                    
                                                                                                    //#line 416 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                                                                                                   x10_int i10213 =
+                                                                                                   x10_int i10179 =
                                                                                                      r;
                                                                                                    
                                                                                                    //#line 415 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                                                                                                   x10::util::Pair<x10_int, x10_int> ret10214;
+                                                                                                   x10::util::Pair<x10_int, x10_int> ret10180;
                                                                                                    
                                                                                                    //#line 419 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-                                                                                                   ret10214 =
+                                                                                                   ret10180 =
                                                                                                      (x10aux::nullCheck(inputs)->
-                                                                                                        FMGL(raw))->__apply(i10213);
-                                                                                                   ret10214;
+                                                                                                        FMGL(raw))->__apply(i10179);
+                                                                                                   ret10180;
                                                                                                }))
                                                                                                ->
                                                                                                  FMGL(second)))) + (x10aux::string_utils::lit(" Actual value removed: ")))) + (res)));
@@ -409,16 +409,16 @@ class functests__closure__5 : public x10::lang::Closure {
                                         (__extension__ ({
                                             
                                             //#line 416 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                                            x10_int i10313 =
+                                            x10_int i10279 =
                                               r;
                                             
                                             //#line 415 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                                            x10_boolean ret10314;
+                                            x10_boolean ret10280;
                                             
                                             //#line 419 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-                                            ret10314 = (x10aux::nullCheck(flags)->
-                                                          FMGL(raw))->__apply(i10313);
-                                            ret10314;
+                                            ret10280 = (x10aux::nullCheck(flags)->
+                                                          FMGL(raw))->__apply(i10279);
+                                            ret10280;
                                         }))
                                         ))) {
                 
@@ -434,19 +434,19 @@ class functests__closure__5 : public x10::lang::Closure {
         }
         
         //#line 517 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-        x10_int i10373 = r;
+        x10_int i10339 = r;
         
         //#line 516 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-        x10_boolean ret10374;
+        x10_boolean ret10340;
         
         //#line 520 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10Call_c
-        (x10aux::nullCheck(flags)->FMGL(raw))->__set(i10373, true);
+        (x10aux::nullCheck(flags)->FMGL(raw))->__set(i10339, true);
         
         //#line 527 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-        ret10374 = true;
+        ret10340 = true;
         
         //#line 516 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10Local_c
-        ret10374;
+        ret10340;
     }
     
     // captured environment
@@ -520,14 +520,14 @@ class functests__closure__6 : public x10::lang::Closure {
         x10_boolean isRemoved = (__extension__ ({
             
             //#line 416 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-            x10_int i10320 = index;
+            x10_int i10286 = index;
             
             //#line 415 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-            x10_boolean ret10321;
+            x10_boolean ret10287;
             
             //#line 419 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-            ret10321 = (x10aux::nullCheck(flags)->FMGL(raw))->__apply(i10320);
-            ret10321;
+            ret10287 = (x10aux::nullCheck(flags)->FMGL(raw))->__apply(i10286);
+            ret10287;
         }))
         ;
         
@@ -536,15 +536,15 @@ class functests__closure__6 : public x10::lang::Closure {
                                             (__extension__ ({
                                                 
                                                 //#line 416 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                                                x10_int i10323 = index;
+                                                x10_int i10289 = index;
                                                 
                                                 //#line 415 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                                                x10::util::Pair<x10_int, x10_int> ret10324;
+                                                x10::util::Pair<x10_int, x10_int> ret10290;
                                                 
                                                 //#line 419 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-                                                ret10324 = (x10aux::nullCheck(inputs)->
-                                                              FMGL(raw))->__apply(i10323);
-                                                ret10324;
+                                                ret10290 = (x10aux::nullCheck(inputs)->
+                                                              FMGL(raw))->__apply(i10289);
+                                                ret10290;
                                             }))
                                             ->FMGL(first));
         
@@ -562,17 +562,17 @@ class functests__closure__6 : public x10::lang::Closure {
                       ((((x10aux::string_utils::lit("Key (")) + ((__extension__ ({
                                                                      
                                                                      //#line 416 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                                                                     x10_int i10335 =
+                                                                     x10_int i10301 =
                                                                        index;
                                                                      
                                                                      //#line 415 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                                                                     x10::util::Pair<x10_int, x10_int> ret10336;
+                                                                     x10::util::Pair<x10_int, x10_int> ret10302;
                                                                      
                                                                      //#line 419 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-                                                                     ret10336 =
+                                                                     ret10302 =
                                                                        (x10aux::nullCheck(inputs)->
-                                                                          FMGL(raw))->__apply(i10335);
-                                                                     ret10336;
+                                                                          FMGL(raw))->__apply(i10301);
+                                                                     ret10302;
                                                                  }))
                                                                  ->
                                                                    FMGL(first)))) + (x10aux::string_utils::lit(") was not found when it should\'ve been."))));
@@ -582,17 +582,17 @@ class functests__closure__6 : public x10::lang::Closure {
                     (!x10aux::struct_equals(res, (__extension__ ({
                                                      
                                                      //#line 416 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                                                     x10_int i10338 =
+                                                     x10_int i10304 =
                                                        index;
                                                      
                                                      //#line 415 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                                                     x10::util::Pair<x10_int, x10_int> ret10339;
+                                                     x10::util::Pair<x10_int, x10_int> ret10305;
                                                      
                                                      //#line 419 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-                                                     ret10339 =
+                                                     ret10305 =
                                                        (x10aux::nullCheck(inputs)->
-                                                          FMGL(raw))->__apply(i10338);
-                                                     ret10339;
+                                                          FMGL(raw))->__apply(i10304);
+                                                     ret10305;
                                                  }))
                                                  ->FMGL(second))))
                 {
@@ -602,17 +602,17 @@ class functests__closure__6 : public x10::lang::Closure {
                       ((((((x10aux::string_utils::lit("Wrong value returned. Expected value: ")) + ((__extension__ ({
                                                                                                         
                                                                                                         //#line 416 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                                                                                                        x10_int i10341 =
+                                                                                                        x10_int i10307 =
                                                                                                           index;
                                                                                                         
                                                                                                         //#line 415 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                                                                                                        x10::util::Pair<x10_int, x10_int> ret10342;
+                                                                                                        x10::util::Pair<x10_int, x10_int> ret10308;
                                                                                                         
                                                                                                         //#line 419 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-                                                                                                        ret10342 =
+                                                                                                        ret10308 =
                                                                                                           (x10aux::nullCheck(inputs)->
-                                                                                                             FMGL(raw))->__apply(i10341);
-                                                                                                        ret10342;
+                                                                                                             FMGL(raw))->__apply(i10307);
+                                                                                                        ret10308;
                                                                                                     }))
                                                                                                     ->
                                                                                                       FMGL(second)))) + (x10aux::string_utils::lit(" Actual value removed: ")))) + (res)));
@@ -626,17 +626,17 @@ class functests__closure__6 : public x10::lang::Closure {
                 x10::io::Console::FMGL(OUT)->print(((((x10aux::string_utils::lit("Invalid result for lookup: lookup(")) + ((__extension__ ({
                                                                                                                                
                                                                                                                                //#line 416 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                                                                                                                               x10_int i10344 =
+                                                                                                                               x10_int i10310 =
                                                                                                                                  index;
                                                                                                                                
                                                                                                                                //#line 415 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                                                                                                                               x10::util::Pair<x10_int, x10_int> ret10345;
+                                                                                                                               x10::util::Pair<x10_int, x10_int> ret10311;
                                                                                                                                
                                                                                                                                //#line 419 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-                                                                                                                               ret10345 =
+                                                                                                                               ret10311 =
                                                                                                                                  (x10aux::nullCheck(inputs)->
-                                                                                                                                    FMGL(raw))->__apply(i10344);
-                                                                                                                               ret10345;
+                                                                                                                                    FMGL(raw))->__apply(i10310);
+                                                                                                                               ret10311;
                                                                                                                            }))
                                                                                                                            ->
                                                                                                                              FMGL(first)))) + (x10aux::string_utils::lit(") should have been null"))));
@@ -721,11 +721,11 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
         ;
         
         //#line 415 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-        x10aux::ref<x10::lang::String> ret6453;
+        x10aux::ref<x10::lang::String> ret6437;
         
         //#line 419 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-        ret6453 = (x10aux::nullCheck(args)->FMGL(raw))->__apply(((x10_int)0));
-        ret6453;
+        ret6437 = (x10aux::nullCheck(args)->FMGL(raw))->__apply(((x10_int)0));
+        ret6437;
     }))
     );
     
@@ -736,11 +736,11 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
         ;
         
         //#line 415 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-        x10aux::ref<x10::lang::String> ret6474;
+        x10aux::ref<x10::lang::String> ret6458;
         
         //#line 419 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-        ret6474 = (x10aux::nullCheck(args)->FMGL(raw))->__apply(((x10_int)1));
-        ret6474;
+        ret6458 = (x10aux::nullCheck(args)->FMGL(raw))->__apply(((x10_int)1));
+        ret6458;
     }))
     );
     
@@ -767,27 +767,27 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
     ;
     
     //#line 247 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-    x10_int size10363 = nAdds;
+    x10_int size10329 = nAdds;
     
     //#line 247 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10ConstructorCall_c
     (inputs)->::x10::lang::Object::_constructor();
     
     //#line 249 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-    x10aux::ref<x10::array::Region> myReg10347 = x10aux::class_cast<x10aux::ref<x10::array::Region> >((__extension__ ({
+    x10aux::ref<x10::array::Region> myReg10313 = x10aux::class_cast<x10aux::ref<x10::array::Region> >((__extension__ ({
         
         //#line 249 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-        x10aux::ref<x10::array::RectRegion1D> alloc10348 =  x10aux::ref<x10::array::RectRegion1D>((new (memset(x10aux::alloc<x10::array::RectRegion1D>(), 0, sizeof(x10::array::RectRegion1D))) x10::array::RectRegion1D()))
+        x10aux::ref<x10::array::RectRegion1D> alloc10314 =  x10aux::ref<x10::array::RectRegion1D>((new (memset(x10aux::alloc<x10::array::RectRegion1D>(), 0, sizeof(x10::array::RectRegion1D))) x10::array::RectRegion1D()))
         ;
         
         //#line 249 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10ConstructorCall_c
-        (alloc10348)->::x10::array::RectRegion1D::_constructor(((x10_int)0),
-                                                               ((x10_int) ((size10363) - (((x10_int)1)))));
-        alloc10348;
+        (alloc10314)->::x10::array::RectRegion1D::_constructor(((x10_int)0),
+                                                               ((x10_int) ((size10329) - (((x10_int)1)))));
+        alloc10314;
     }))
     );
     
     //#line 251 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-    inputs->FMGL(region) = myReg10347;
+    inputs->FMGL(region) = myReg10313;
     
     //#line 251 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
     inputs->FMGL(rank) = ((x10_int)1);
@@ -802,7 +802,7 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
     inputs->FMGL(rail) = true;
     
     //#line 251 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-    inputs->FMGL(size) = size10363;
+    inputs->FMGL(size) = size10329;
     
     //#line 253 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
     inputs->FMGL(layout_min0) = inputs->FMGL(layout_stride1) = inputs->FMGL(layout_min1) =
@@ -812,7 +812,7 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
     inputs->FMGL(layout) = X10_NULL;
     
     //#line 255 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-    inputs->FMGL(raw) = x10::util::IndexedMemoryChunk<void>::allocate<x10::util::Pair<x10_int, x10_int> >(size10363, 8, false, true);
+    inputs->FMGL(raw) = x10::util::IndexedMemoryChunk<void>::allocate<x10::util::Pair<x10_int, x10_int> >(size10329, 8, false, true);
     
     //#line 28 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10LocalDecl_c
     x10aux::ref<x10::util::HashMap<x10_int, x10_int> > uniqueKeys =
@@ -831,7 +831,7 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
         {
             
             //#line 30 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10LocalDecl_c
-            x10aux::ref<x10::lang::Throwable> throwable10390 = X10_NULL;
+            x10aux::ref<x10::lang::Throwable> throwable10356 = X10_NULL;
             
             //#line 30 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": polyglot.ast.Try_c
             try {
@@ -883,27 +883,27 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
             catch (x10aux::__ref& __ref__2) {
                 x10aux::ref<x10::lang::Throwable>& __exc__ref__2 = (x10aux::ref<x10::lang::Throwable>&)__ref__2;
                 if (true) {
-                    x10aux::ref<x10::lang::Throwable> formal10391 =
+                    x10aux::ref<x10::lang::Throwable> formal10357 =
                       static_cast<x10aux::ref<x10::lang::Throwable> >(__exc__ref__2);
                     {
                         
                         //#line 30 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": Eval of x10.ast.X10LocalAssign_c
-                        throwable10390 = formal10391;
+                        throwable10356 = formal10357;
                     }
                 } else
                 throw;
             }
             
             //#line 30 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10If_c
-            if ((!x10aux::struct_equals(X10_NULL, throwable10390)))
+            if ((!x10aux::struct_equals(X10_NULL, throwable10356)))
             {
                 
                 //#line 30 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10If_c
-                if (x10aux::instanceof<x10aux::ref<x10::compiler::Abort> >(throwable10390))
+                if (x10aux::instanceof<x10aux::ref<x10::compiler::Abort> >(throwable10356))
                 {
                     
                     //#line 30 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": polyglot.ast.Throw_c
-                    x10aux::throwException(x10aux::nullCheck(throwable10390));
+                    x10aux::throwException(x10aux::nullCheck(throwable10356));
                 }
                 
             }
@@ -916,15 +916,15 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
             }
             
             //#line 30 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10If_c
-            if ((!x10aux::struct_equals(X10_NULL, throwable10390)))
+            if ((!x10aux::struct_equals(X10_NULL, throwable10356)))
             {
                 
                 //#line 30 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10If_c
-                if (!(x10aux::instanceof<x10aux::ref<x10::compiler::Finalization> >(throwable10390)))
+                if (!(x10aux::instanceof<x10aux::ref<x10::compiler::Finalization> >(throwable10356)))
                 {
                     
                     //#line 30 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": polyglot.ast.Throw_c
-                    x10aux::throwException(x10aux::nullCheck(throwable10390));
+                    x10aux::throwException(x10aux::nullCheck(throwable10356));
                 }
                 
             }
@@ -938,28 +938,28 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
     ;
     
     //#line 297 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-    x10_int size10364 = inputs->FMGL(size);
+    x10_int size10330 = inputs->FMGL(size);
     
     //#line 297 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10ConstructorCall_c
     (flags)->::x10::lang::Object::_constructor();
     
     //#line 299 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-    x10aux::ref<x10::array::Region> myReg10352 = x10aux::class_cast<x10aux::ref<x10::array::Region> >((__extension__ ({
+    x10aux::ref<x10::array::Region> myReg10318 = x10aux::class_cast<x10aux::ref<x10::array::Region> >((__extension__ ({
         
         //#line 299 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-        x10aux::ref<x10::array::RectRegion1D> alloc10353 =
+        x10aux::ref<x10::array::RectRegion1D> alloc10319 =
            x10aux::ref<x10::array::RectRegion1D>((new (memset(x10aux::alloc<x10::array::RectRegion1D>(), 0, sizeof(x10::array::RectRegion1D))) x10::array::RectRegion1D()))
         ;
         
         //#line 299 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10ConstructorCall_c
-        (alloc10353)->::x10::array::RectRegion1D::_constructor(
-          ((x10_int)0), ((x10_int) ((size10364) - (((x10_int)1)))));
-        alloc10353;
+        (alloc10319)->::x10::array::RectRegion1D::_constructor(
+          ((x10_int)0), ((x10_int) ((size10330) - (((x10_int)1)))));
+        alloc10319;
     }))
     );
     
     //#line 301 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-    flags->FMGL(region) = myReg10352;
+    flags->FMGL(region) = myReg10318;
     
     //#line 301 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
     flags->FMGL(rank) = ((x10_int)1);
@@ -974,7 +974,7 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
     flags->FMGL(rail) = true;
     
     //#line 301 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-    flags->FMGL(size) = size10364;
+    flags->FMGL(size) = size10330;
     
     //#line 303 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
     flags->FMGL(layout_min0) = flags->FMGL(layout_stride1) =
@@ -984,32 +984,32 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
     flags->FMGL(layout) = X10_NULL;
     
     //#line 305 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-    x10::util::IndexedMemoryChunk<x10_boolean > r10354 = x10::util::IndexedMemoryChunk<void>::allocate<x10_boolean >(size10364, 8, false, false);
+    x10::util::IndexedMemoryChunk<x10_boolean > r10320 = x10::util::IndexedMemoryChunk<void>::allocate<x10_boolean >(size10330, 8, false, false);
     
     //#line 306 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-    x10_int i6327max10349 = ((x10_int) ((size10364) - (((x10_int)1))));
+    x10_int i6311max10315 = ((x10_int) ((size10330) - (((x10_int)1))));
     
     //#line 306 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": polyglot.ast.For_c
     {
-        x10_int i10350;
+        x10_int i10316;
         for (
              //#line 306 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-             i10350 = ((x10_int)0); ((i10350) <= (i6327max10349));
+             i10316 = ((x10_int)0); ((i10316) <= (i6311max10315));
              
              //#line 306 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-             i10350 = ((x10_int) ((i10350) + (((x10_int)1)))))
+             i10316 = ((x10_int) ((i10316) + (((x10_int)1)))))
         {
             
             //#line 306 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-            x10_int i10351 = i10350;
+            x10_int i10317 = i10316;
             
             //#line 307 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10Call_c
-            (r10354)->__set(i10351, false);
+            (r10320)->__set(i10317, false);
         }
     }
     
     //#line 309 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-    flags->FMGL(raw) = r10354;
+    flags->FMGL(raw) = r10320;
     {
         
         //#line 38 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": Eval of x10.ast.X10Call_c
@@ -1021,7 +1021,7 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
         {
             
             //#line 38 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10LocalDecl_c
-            x10aux::ref<x10::lang::Throwable> throwable10393 =
+            x10aux::ref<x10::lang::Throwable> throwable10359 =
               X10_NULL;
             
             //#line 38 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": polyglot.ast.Try_c
@@ -1075,27 +1075,27 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
             catch (x10aux::__ref& __ref__4) {
                 x10aux::ref<x10::lang::Throwable>& __exc__ref__4 = (x10aux::ref<x10::lang::Throwable>&)__ref__4;
                 if (true) {
-                    x10aux::ref<x10::lang::Throwable> formal10394 =
+                    x10aux::ref<x10::lang::Throwable> formal10360 =
                       static_cast<x10aux::ref<x10::lang::Throwable> >(__exc__ref__4);
                     {
                         
                         //#line 38 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": Eval of x10.ast.X10LocalAssign_c
-                        throwable10393 = formal10394;
+                        throwable10359 = formal10360;
                     }
                 } else
                 throw;
             }
             
             //#line 38 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10If_c
-            if ((!x10aux::struct_equals(X10_NULL, throwable10393)))
+            if ((!x10aux::struct_equals(X10_NULL, throwable10359)))
             {
                 
                 //#line 38 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10If_c
-                if (x10aux::instanceof<x10aux::ref<x10::compiler::Abort> >(throwable10393))
+                if (x10aux::instanceof<x10aux::ref<x10::compiler::Abort> >(throwable10359))
                 {
                     
                     //#line 38 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": polyglot.ast.Throw_c
-                    x10aux::throwException(x10aux::nullCheck(throwable10393));
+                    x10aux::throwException(x10aux::nullCheck(throwable10359));
                 }
                 
             }
@@ -1108,15 +1108,15 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
             }
             
             //#line 38 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10If_c
-            if ((!x10aux::struct_equals(X10_NULL, throwable10393)))
+            if ((!x10aux::struct_equals(X10_NULL, throwable10359)))
             {
                 
                 //#line 38 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10If_c
-                if (!(x10aux::instanceof<x10aux::ref<x10::compiler::Finalization> >(throwable10393)))
+                if (!(x10aux::instanceof<x10aux::ref<x10::compiler::Finalization> >(throwable10359)))
                 {
                     
                     //#line 38 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": polyglot.ast.Throw_c
-                    x10aux::throwException(x10aux::nullCheck(throwable10393));
+                    x10aux::throwException(x10aux::nullCheck(throwable10359));
                 }
                 
             }
@@ -1134,7 +1134,7 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
         {
             
             //#line 45 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10LocalDecl_c
-            x10aux::ref<x10::lang::Throwable> throwable10396 =
+            x10aux::ref<x10::lang::Throwable> throwable10362 =
               X10_NULL;
             
             //#line 45 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": polyglot.ast.Try_c
@@ -1191,27 +1191,27 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
             catch (x10aux::__ref& __ref__6) {
                 x10aux::ref<x10::lang::Throwable>& __exc__ref__6 = (x10aux::ref<x10::lang::Throwable>&)__ref__6;
                 if (true) {
-                    x10aux::ref<x10::lang::Throwable> formal10397 =
+                    x10aux::ref<x10::lang::Throwable> formal10363 =
                       static_cast<x10aux::ref<x10::lang::Throwable> >(__exc__ref__6);
                     {
                         
                         //#line 45 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": Eval of x10.ast.X10LocalAssign_c
-                        throwable10396 = formal10397;
+                        throwable10362 = formal10363;
                     }
                 } else
                 throw;
             }
             
             //#line 45 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10If_c
-            if ((!x10aux::struct_equals(X10_NULL, throwable10396)))
+            if ((!x10aux::struct_equals(X10_NULL, throwable10362)))
             {
                 
                 //#line 45 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10If_c
-                if (x10aux::instanceof<x10aux::ref<x10::compiler::Abort> >(throwable10396))
+                if (x10aux::instanceof<x10aux::ref<x10::compiler::Abort> >(throwable10362))
                 {
                     
                     //#line 45 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": polyglot.ast.Throw_c
-                    x10aux::throwException(x10aux::nullCheck(throwable10396));
+                    x10aux::throwException(x10aux::nullCheck(throwable10362));
                 }
                 
             }
@@ -1224,15 +1224,15 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
             }
             
             //#line 45 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10If_c
-            if ((!x10aux::struct_equals(X10_NULL, throwable10396)))
+            if ((!x10aux::struct_equals(X10_NULL, throwable10362)))
             {
                 
                 //#line 45 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10If_c
-                if (!(x10aux::instanceof<x10aux::ref<x10::compiler::Finalization> >(throwable10396)))
+                if (!(x10aux::instanceof<x10aux::ref<x10::compiler::Finalization> >(throwable10362)))
                 {
                     
                     //#line 45 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": polyglot.ast.Throw_c
-                    x10aux::throwException(x10aux::nullCheck(throwable10396));
+                    x10aux::throwException(x10aux::nullCheck(throwable10362));
                 }
                 
             }
@@ -1254,28 +1254,28 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
     ;
     
     //#line 247 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-    x10_int size10365 = nAdds;
+    x10_int size10331 = nAdds;
     
     //#line 247 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10ConstructorCall_c
     (inputs2)->::x10::lang::Object::_constructor();
     
     //#line 249 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-    x10aux::ref<x10::array::Region> myReg10355 = x10aux::class_cast<x10aux::ref<x10::array::Region> >((__extension__ ({
+    x10aux::ref<x10::array::Region> myReg10321 = x10aux::class_cast<x10aux::ref<x10::array::Region> >((__extension__ ({
         
         //#line 249 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-        x10aux::ref<x10::array::RectRegion1D> alloc10356 =
+        x10aux::ref<x10::array::RectRegion1D> alloc10322 =
            x10aux::ref<x10::array::RectRegion1D>((new (memset(x10aux::alloc<x10::array::RectRegion1D>(), 0, sizeof(x10::array::RectRegion1D))) x10::array::RectRegion1D()))
         ;
         
         //#line 249 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10ConstructorCall_c
-        (alloc10356)->::x10::array::RectRegion1D::_constructor(
-          ((x10_int)0), ((x10_int) ((size10365) - (((x10_int)1)))));
-        alloc10356;
+        (alloc10322)->::x10::array::RectRegion1D::_constructor(
+          ((x10_int)0), ((x10_int) ((size10331) - (((x10_int)1)))));
+        alloc10322;
     }))
     );
     
     //#line 251 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-    inputs2->FMGL(region) = myReg10355;
+    inputs2->FMGL(region) = myReg10321;
     
     //#line 251 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
     inputs2->FMGL(rank) = ((x10_int)1);
@@ -1290,7 +1290,7 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
     inputs2->FMGL(rail) = true;
     
     //#line 251 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-    inputs2->FMGL(size) = size10365;
+    inputs2->FMGL(size) = size10331;
     
     //#line 253 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
     inputs2->FMGL(layout_min0) = inputs2->FMGL(layout_stride1) =
@@ -1300,7 +1300,7 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
     inputs2->FMGL(layout) = X10_NULL;
     
     //#line 255 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-    inputs2->FMGL(raw) = x10::util::IndexedMemoryChunk<void>::allocate<x10::util::Pair<x10_int, x10_int> >(size10365, 8, false, true);
+    inputs2->FMGL(raw) = x10::util::IndexedMemoryChunk<void>::allocate<x10::util::Pair<x10_int, x10_int> >(size10331, 8, false, true);
     
     //#line 56 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10LocalDecl_c
     x10aux::ref<x10::util::HashMap<x10_int, x10_int> > uniqueKeys2 =
@@ -1316,28 +1316,28 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
     ;
     
     //#line 297 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-    x10_int size10366 = inputs->FMGL(size);
+    x10_int size10332 = inputs->FMGL(size);
     
     //#line 297 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10ConstructorCall_c
     (flags2)->::x10::lang::Object::_constructor();
     
     //#line 299 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-    x10aux::ref<x10::array::Region> myReg10360 = x10aux::class_cast<x10aux::ref<x10::array::Region> >((__extension__ ({
+    x10aux::ref<x10::array::Region> myReg10326 = x10aux::class_cast<x10aux::ref<x10::array::Region> >((__extension__ ({
         
         //#line 299 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-        x10aux::ref<x10::array::RectRegion1D> alloc10361 =
+        x10aux::ref<x10::array::RectRegion1D> alloc10327 =
            x10aux::ref<x10::array::RectRegion1D>((new (memset(x10aux::alloc<x10::array::RectRegion1D>(), 0, sizeof(x10::array::RectRegion1D))) x10::array::RectRegion1D()))
         ;
         
         //#line 299 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10ConstructorCall_c
-        (alloc10361)->::x10::array::RectRegion1D::_constructor(
-          ((x10_int)0), ((x10_int) ((size10366) - (((x10_int)1)))));
-        alloc10361;
+        (alloc10327)->::x10::array::RectRegion1D::_constructor(
+          ((x10_int)0), ((x10_int) ((size10332) - (((x10_int)1)))));
+        alloc10327;
     }))
     );
     
     //#line 301 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-    flags2->FMGL(region) = myReg10360;
+    flags2->FMGL(region) = myReg10326;
     
     //#line 301 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
     flags2->FMGL(rank) = ((x10_int)1);
@@ -1352,7 +1352,7 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
     flags2->FMGL(rail) = true;
     
     //#line 301 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-    flags2->FMGL(size) = size10366;
+    flags2->FMGL(size) = size10332;
     
     //#line 303 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
     flags2->FMGL(layout_min0) = flags2->FMGL(layout_stride1) =
@@ -1362,32 +1362,32 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
     flags2->FMGL(layout) = X10_NULL;
     
     //#line 305 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-    x10::util::IndexedMemoryChunk<x10_boolean > r10362 = x10::util::IndexedMemoryChunk<void>::allocate<x10_boolean >(size10366, 8, false, false);
+    x10::util::IndexedMemoryChunk<x10_boolean > r10328 = x10::util::IndexedMemoryChunk<void>::allocate<x10_boolean >(size10332, 8, false, false);
     
     //#line 306 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-    x10_int i6327max10357 = ((x10_int) ((size10366) - (((x10_int)1))));
+    x10_int i6311max10323 = ((x10_int) ((size10332) - (((x10_int)1))));
     
     //#line 306 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": polyglot.ast.For_c
     {
-        x10_int i10358;
+        x10_int i10324;
         for (
              //#line 306 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-             i10358 = ((x10_int)0); ((i10358) <= (i6327max10357));
+             i10324 = ((x10_int)0); ((i10324) <= (i6311max10323));
              
              //#line 306 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-             i10358 = ((x10_int) ((i10358) + (((x10_int)1)))))
+             i10324 = ((x10_int) ((i10324) + (((x10_int)1)))))
         {
             
             //#line 306 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-            x10_int i10359 = i10358;
+            x10_int i10325 = i10324;
             
             //#line 307 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10Call_c
-            (r10362)->__set(i10359, false);
+            (r10328)->__set(i10325, false);
         }
     }
     
     //#line 309 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-    flags2->FMGL(raw) = r10362;
+    flags2->FMGL(raw) = r10328;
     {
         
         //#line 59 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": Eval of x10.ast.X10Call_c
@@ -1399,7 +1399,7 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
         {
             
             //#line 59 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10LocalDecl_c
-            x10aux::ref<x10::lang::Throwable> throwable10399 =
+            x10aux::ref<x10::lang::Throwable> throwable10365 =
               X10_NULL;
             
             //#line 59 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": polyglot.ast.Try_c
@@ -1443,27 +1443,27 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
             catch (x10aux::__ref& __ref__8) {
                 x10aux::ref<x10::lang::Throwable>& __exc__ref__8 = (x10aux::ref<x10::lang::Throwable>&)__ref__8;
                 if (true) {
-                    x10aux::ref<x10::lang::Throwable> formal10400 =
+                    x10aux::ref<x10::lang::Throwable> formal10366 =
                       static_cast<x10aux::ref<x10::lang::Throwable> >(__exc__ref__8);
                     {
                         
                         //#line 59 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": Eval of x10.ast.X10LocalAssign_c
-                        throwable10399 = formal10400;
+                        throwable10365 = formal10366;
                     }
                 } else
                 throw;
             }
             
             //#line 59 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10If_c
-            if ((!x10aux::struct_equals(X10_NULL, throwable10399)))
+            if ((!x10aux::struct_equals(X10_NULL, throwable10365)))
             {
                 
                 //#line 59 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10If_c
-                if (x10aux::instanceof<x10aux::ref<x10::compiler::Abort> >(throwable10399))
+                if (x10aux::instanceof<x10aux::ref<x10::compiler::Abort> >(throwable10365))
                 {
                     
                     //#line 59 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": polyglot.ast.Throw_c
-                    x10aux::throwException(x10aux::nullCheck(throwable10399));
+                    x10aux::throwException(x10aux::nullCheck(throwable10365));
                 }
                 
             }
@@ -1476,15 +1476,15 @@ void functests::main(x10aux::ref<x10::array::Array<x10aux::ref<x10::lang::String
             }
             
             //#line 59 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10If_c
-            if ((!x10aux::struct_equals(X10_NULL, throwable10399)))
+            if ((!x10aux::struct_equals(X10_NULL, throwable10365)))
             {
                 
                 //#line 59 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10If_c
-                if (!(x10aux::instanceof<x10aux::ref<x10::compiler::Finalization> >(throwable10399)))
+                if (!(x10aux::instanceof<x10aux::ref<x10::compiler::Finalization> >(throwable10365)))
                 {
                     
                     //#line 59 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": polyglot.ast.Throw_c
-                    x10aux::throwException(x10aux::nullCheck(throwable10399));
+                    x10aux::throwException(x10aux::nullCheck(throwable10365));
                 }
                 
             }
@@ -1518,40 +1518,40 @@ void functests::doRandomAdd(x10aux::ref<x10::util::Random> rand,
     x10_int thisValue = x10aux::nullCheck(rand)->nextInt();
     
     //#line 517 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-    x10_int i10369 = index;
+    x10_int i10335 = index;
     
     //#line 517 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-    x10::util::Pair<x10_int, x10_int> v10370 = (__extension__ ({
+    x10::util::Pair<x10_int, x10_int> v10336 = (__extension__ ({
         
         //#line 91 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": x10.ast.X10LocalDecl_c
-        x10::util::Pair<x10_int, x10_int> alloc10371 =  x10::util::Pair<x10_int, x10_int>::_alloc();
+        x10::util::Pair<x10_int, x10_int> alloc10337 =  x10::util::Pair<x10_int, x10_int>::_alloc();
         
         //#line 21 "/opt/x10/stdlib/x10.jar:x10/util/Pair.x10": x10.ast.X10LocalDecl_c
-        x10_int first10367 = thisKey;
+        x10_int first10333 = thisKey;
         
         //#line 21 "/opt/x10/stdlib/x10.jar:x10/util/Pair.x10": x10.ast.X10LocalDecl_c
-        x10_int second10368 = thisValue;
+        x10_int second10334 = thisValue;
         
         //#line 22 "/opt/x10/stdlib/x10.jar:x10/util/Pair.x10": Eval of x10.ast.X10FieldAssign_c
-        alloc10371->FMGL(first) = first10367;
+        alloc10337->FMGL(first) = first10333;
         
         //#line 23 "/opt/x10/stdlib/x10.jar:x10/util/Pair.x10": Eval of x10.ast.X10FieldAssign_c
-        alloc10371->FMGL(second) = second10368;
-        alloc10371;
+        alloc10337->FMGL(second) = second10334;
+        alloc10337;
     }))
     ;
     
     //#line 516 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-    x10::util::Pair<x10_int, x10_int> ret10372;
+    x10::util::Pair<x10_int, x10_int> ret10338;
     
     //#line 520 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10Call_c
-    (x10aux::nullCheck(inputs)->FMGL(raw))->__set(i10369, v10370);
+    (x10aux::nullCheck(inputs)->FMGL(raw))->__set(i10335, v10336);
     
     //#line 527 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-    ret10372 = v10370;
+    ret10338 = v10336;
     
     //#line 516 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10Local_c
-    ret10372;
+    ret10338;
     
     //#line 92 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/functests.x10": Eval of x10.ast.X10Call_c
     x10::lang::Runtime::runAsync(x10aux::ref<x10::lang::VoidFun_0_0>(x10aux::ref<functests__closure__4>(new (x10aux::alloc<x10::lang::VoidFun_0_0>(sizeof(functests__closure__4)))functests__closure__4(hashTable, finalKey, thisValue))));
@@ -1576,15 +1576,15 @@ void functests::doRandomRemove(x10aux::ref<x10::util::Random> rand,
     x10_int key = (__extension__ ({
                       
                       //#line 416 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                      x10_int i10207 = r;
+                      x10_int i10173 = r;
                       
                       //#line 415 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                      x10::util::Pair<x10_int, x10_int> ret10208;
+                      x10::util::Pair<x10_int, x10_int> ret10174;
                       
                       //#line 419 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-                      ret10208 = (x10aux::nullCheck(inputs)->
-                                    FMGL(raw))->__apply(i10207);
-                      ret10208;
+                      ret10174 = (x10aux::nullCheck(inputs)->
+                                    FMGL(raw))->__apply(i10173);
+                      ret10174;
                   }))
                   ->FMGL(first);
     

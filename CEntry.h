@@ -77,7 +77,7 @@ template<class TPMGL(K), class TPMGL(V)> class CEntry : public x10::lang::Object
     virtual x10_int getFirstEntry();
     virtual x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> > CEntry____CEntry__this(
       );
-    virtual void __fieldInitializers7705();
+    virtual void __fieldInitializers7689();
     
     // Serialization
     public: static const x10aux::serialization_id_t _serialization_id;
@@ -124,46 +124,46 @@ template<class TPMGL(K), class TPMGL(V)> class CEntry;
 #include <CEntry.h>
 
 
-//#line 232 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10FieldDecl_c
+//#line 242 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10FieldDecl_c
 
-//#line 233 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10FieldDecl_c
+//#line 243 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10FieldDecl_c
 
-//#line 234 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10FieldDecl_c
+//#line 244 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10FieldDecl_c
 
-//#line 235 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10FieldDecl_c
+//#line 245 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10FieldDecl_c
 
-//#line 236 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10FieldDecl_c
+//#line 246 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10FieldDecl_c
 
-//#line 237 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10FieldDecl_c
+//#line 247 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10FieldDecl_c
 
-//#line 238 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10FieldDecl_c
+//#line 248 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10FieldDecl_c
 
-//#line 243 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10ConstructorDecl_c
+//#line 251 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10ConstructorDecl_c
 template<class TPMGL(K), class TPMGL(V)> void CEntry<TPMGL(K), TPMGL(V)>::_constructor(
                                            TPMGL(K) _key, TPMGL(V) _value) {
     
-    //#line 243 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10ConstructorCall_c
+    //#line 251 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10ConstructorCall_c
     (((x10aux::ref<x10::lang::Object>)this))->::x10::lang::Object::_constructor();
     
-    //#line 243 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.AssignPropertyCall_c
+    //#line 251 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.AssignPropertyCall_c
     
-    //#line 230 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10Call_c
-    ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->CEntry<TPMGL(K), TPMGL(V)>::__fieldInitializers7705();
+    //#line 240 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10Call_c
+    ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->CEntry<TPMGL(K), TPMGL(V)>::__fieldInitializers7689();
     
-    //#line 244 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
+    //#line 252 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
     ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->FMGL(key) =
       _key;
     
-    //#line 245 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
+    //#line 253 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
     ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->FMGL(value) =
       _value;
     
-    //#line 246 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
+    //#line 254 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
     ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->FMGL(bitmap) =
       (__extension__ ({
         
-        //#line 246 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10LocalDecl_c
-        x10aux::ref<x10::array::Array<x10_boolean> > alloc8332 = 
+        //#line 254 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10LocalDecl_c
+        x10aux::ref<x10::array::Array<x10_boolean> > alloc8298 = 
         x10aux::ref<x10::array::Array<x10_boolean> >((new (memset(x10aux::alloc<x10::array::Array<x10_boolean> >(), 0, sizeof(x10::array::Array<x10_boolean>))) x10::array::Array<x10_boolean>()))
         ;
         
@@ -171,87 +171,87 @@ template<class TPMGL(K), class TPMGL(V)> void CEntry<TPMGL(K), TPMGL(V)>::_const
         ;
         
         //#line 247 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10ConstructorCall_c
-        (alloc8332)->::x10::lang::Object::_constructor();
+        (alloc8298)->::x10::lang::Object::_constructor();
         
         //#line 249 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-        x10aux::ref<x10::array::Region> myReg10566 = x10aux::class_cast<x10aux::ref<x10::array::Region> >((__extension__ ({
+        x10aux::ref<x10::array::Region> myReg10534 = x10aux::class_cast<x10aux::ref<x10::array::Region> >((__extension__ ({
             
             //#line 249 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-            x10aux::ref<x10::array::RectRegion1D> alloc10567 =  x10aux::ref<x10::array::RectRegion1D>((new (memset(x10aux::alloc<x10::array::RectRegion1D>(), 0, sizeof(x10::array::RectRegion1D))) x10::array::RectRegion1D()))
+            x10aux::ref<x10::array::RectRegion1D> alloc10535 =  x10aux::ref<x10::array::RectRegion1D>((new (memset(x10aux::alloc<x10::array::RectRegion1D>(), 0, sizeof(x10::array::RectRegion1D))) x10::array::RectRegion1D()))
             ;
             
             //#line 249 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10ConstructorCall_c
-            (alloc10567)->::x10::array::RectRegion1D::_constructor(
+            (alloc10535)->::x10::array::RectRegion1D::_constructor(
               ((x10_int)0), ((x10_int) ((((x10_int)4)) - (((x10_int)1)))));
-            alloc10567;
+            alloc10535;
         }))
         );
         
         //#line 251 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-        alloc8332->FMGL(region) = myReg10566;
+        alloc8298->FMGL(region) = myReg10534;
         
         //#line 251 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-        alloc8332->FMGL(rank) = ((x10_int)1);
+        alloc8298->FMGL(rank) = ((x10_int)1);
         
         //#line 251 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-        alloc8332->FMGL(rect) = true;
+        alloc8298->FMGL(rect) = true;
         
         //#line 251 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-        alloc8332->FMGL(zeroBased) = true;
+        alloc8298->FMGL(zeroBased) = true;
         
         //#line 251 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-        alloc8332->FMGL(rail) = true;
+        alloc8298->FMGL(rail) = true;
         
         //#line 251 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-        alloc8332->FMGL(size) = ((x10_int)4);
+        alloc8298->FMGL(size) = ((x10_int)4);
         
         //#line 253 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-        alloc8332->FMGL(layout_min0) = alloc8332->FMGL(layout_stride1) =
-          alloc8332->FMGL(layout_min1) = ((x10_int)0);
+        alloc8298->FMGL(layout_min0) = alloc8298->FMGL(layout_stride1) =
+          alloc8298->FMGL(layout_min1) = ((x10_int)0);
         
         //#line 254 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-        alloc8332->FMGL(layout) = X10_NULL;
+        alloc8298->FMGL(layout) = X10_NULL;
         
         //#line 255 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10FieldAssign_c
-        alloc8332->FMGL(raw) = x10::util::IndexedMemoryChunk<void>::allocate<x10_boolean >(((x10_int)4), 8, false, true);
-        alloc8332;
+        alloc8298->FMGL(raw) = x10::util::IndexedMemoryChunk<void>::allocate<x10_boolean >(((x10_int)4), 8, false, true);
+        alloc8298;
     }))
     ;
     
-    //#line 247 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": polyglot.ast.For_c
+    //#line 255 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": polyglot.ast.For_c
     {
         x10_int index;
         for (
-             //#line 247 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10LocalDecl_c
+             //#line 255 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10LocalDecl_c
              index = ((x10_int)0); ((index) < (((x10_int)4))); 
-                                                               //#line 247 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10LocalAssign_c
+                                                               //#line 255 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10LocalAssign_c
                                                                index =
                                                                  ((x10_int) ((index) + (((x10_int)1)))))
         {
             
-            //#line 248 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10LocalDecl_c
-            x10aux::ref<x10::array::Array<x10_boolean> > this10568 =
+            //#line 256 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10LocalDecl_c
+            x10aux::ref<x10::array::Array<x10_boolean> > this10536 =
               ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->
                 FMGL(bitmap);
             
             //#line 517 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-            x10_int i10569 = index;
+            x10_int i10537 = index;
             
             //#line 516 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-            x10_boolean ret10570;
+            x10_boolean ret10538;
             
             //#line 520 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10Call_c
-            (x10aux::nullCheck(this10568)->FMGL(raw))->__set(i10569, false);
+            (x10aux::nullCheck(this10536)->FMGL(raw))->__set(i10537, false);
             
             //#line 527 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-            ret10570 = false;
+            ret10538 = false;
             
             //#line 516 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10Local_c
-            ret10570;
+            ret10538;
         }
     }
     
-    //#line 250 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
+    //#line 258 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
     ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->FMGL(timestamp) =
       x10aux::system_utils::nanoTime();
 }
@@ -266,138 +266,138 @@ template<class TPMGL(K), class TPMGL(V)> x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> 
 
 
 
-//#line 253 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10MethodDecl_c
+//#line 261 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10MethodDecl_c
 template<class TPMGL(K), class TPMGL(V)> TPMGL(K) CEntry<TPMGL(K), TPMGL(V)>::getKey(
   ) {
     
-    //#line 254 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10If_c
+    //#line 262 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10If_c
     if (((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->
           FMGL(isNull)) {
         
-        //#line 256 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": polyglot.ast.Throw_c
+        //#line 263 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": polyglot.ast.Throw_c
         x10aux::throwException(x10aux::nullCheck(x10::lang::RuntimeException::_make(x10aux::string_utils::lit("Accessing key of a null entry"))));
     }
     
-    //#line 258 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10Return_c
+    //#line 265 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10Return_c
     return ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->
              FMGL(key);
     
 }
 
-//#line 260 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10MethodDecl_c
+//#line 267 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10MethodDecl_c
 template<class TPMGL(K), class TPMGL(V)> void CEntry<TPMGL(K), TPMGL(V)>::setKey(
   TPMGL(K) _key) {
     
-    //#line 261 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
+    //#line 268 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
     ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->FMGL(isNull) =
       false;
     
-    //#line 262 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
+    //#line 269 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
     ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->FMGL(key) =
       _key;
 }
 
-//#line 265 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10MethodDecl_c
+//#line 272 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10MethodDecl_c
 template<class TPMGL(K), class TPMGL(V)> TPMGL(V) CEntry<TPMGL(K), TPMGL(V)>::getValue(
   ) {
     
-    //#line 266 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10If_c
+    //#line 273 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10If_c
     if (((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->
           FMGL(isNull)) {
         
-        //#line 268 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": polyglot.ast.Throw_c
+        //#line 274 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": polyglot.ast.Throw_c
         x10aux::throwException(x10aux::nullCheck(x10::lang::RuntimeException::_make(x10aux::string_utils::lit("Accessing value of a null entry"))));
     }
     
-    //#line 270 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10Return_c
+    //#line 276 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10Return_c
     return ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->
              FMGL(value);
     
 }
 
-//#line 272 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10MethodDecl_c
+//#line 278 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10MethodDecl_c
 template<class TPMGL(K), class TPMGL(V)> void CEntry<TPMGL(K), TPMGL(V)>::setValue(
   TPMGL(V) _value) {
     
-    //#line 273 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
+    //#line 279 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
     ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->FMGL(value) =
       _value;
 }
 
-//#line 276 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10MethodDecl_c
+//#line 282 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10MethodDecl_c
 template<class TPMGL(K), class TPMGL(V)> x10aux::ref<x10::array::Array<x10_boolean> >
   CEntry<TPMGL(K), TPMGL(V)>::getBitmap() {
     
-    //#line 277 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10Return_c
+    //#line 283 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10Return_c
     return ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->
              FMGL(bitmap);
     
 }
 
-//#line 280 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10MethodDecl_c
+//#line 286 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10MethodDecl_c
 template<class TPMGL(K), class TPMGL(V)> void CEntry<TPMGL(K), TPMGL(V)>::setBit(
   x10_int index, x10_boolean bit) {
     
-    //#line 281 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10LocalDecl_c
-    x10aux::ref<x10::array::Array<x10_boolean> > this10571 =
+    //#line 287 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10LocalDecl_c
+    x10aux::ref<x10::array::Array<x10_boolean> > this10539 =
       ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->FMGL(bitmap);
     
     //#line 517 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-    x10_int i10572 = index;
+    x10_int i10540 = index;
     
     //#line 517 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-    x10_boolean v10573 = bit;
+    x10_boolean v10541 = bit;
     
     //#line 516 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-    x10_boolean ret10574;
+    x10_boolean ret10542;
     
     //#line 520 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10Call_c
-    (x10aux::nullCheck(this10571)->FMGL(raw))->__set(i10572, v10573);
+    (x10aux::nullCheck(this10539)->FMGL(raw))->__set(i10540, v10541);
     
     //#line 527 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-    ret10574 = v10573;
+    ret10542 = v10541;
     
     //#line 516 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10Local_c
-    ret10574;
+    ret10542;
 }
 
-//#line 284 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10MethodDecl_c
+//#line 291 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10MethodDecl_c
 template<class TPMGL(K), class TPMGL(V)> x10_int CEntry<TPMGL(K), TPMGL(V)>::getFirstEntry(
   ) {
     
-    //#line 285 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": polyglot.ast.For_c
+    //#line 292 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": polyglot.ast.For_c
     {
         x10_int index;
         for (
-             //#line 285 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10LocalDecl_c
+             //#line 292 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10LocalDecl_c
              index = ((x10_int)0); ((index) < (((x10_int)4)));
              
-             //#line 285 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10LocalAssign_c
+             //#line 292 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10LocalAssign_c
              index = ((x10_int) ((index) + (((x10_int)1)))))
         {
             
-            //#line 286 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10If_c
+            //#line 293 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10If_c
             if ((__extension__ ({
                     
-                    //#line 286 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10LocalDecl_c
-                    x10aux::ref<x10::array::Array<x10_boolean> > this10542 =
+                    //#line 293 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10LocalDecl_c
+                    x10aux::ref<x10::array::Array<x10_boolean> > this10509 =
                       ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->
                         FMGL(bitmap);
                     
                     //#line 416 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                    x10_int i10541 = index;
+                    x10_int i10508 = index;
                     
                     //#line 415 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": x10.ast.X10LocalDecl_c
-                    x10_boolean ret10543;
+                    x10_boolean ret10510;
                     
                     //#line 419 "/opt/x10/stdlib/x10.jar:x10/array/Array.x10": Eval of x10.ast.X10LocalAssign_c
-                    ret10543 = (x10aux::nullCheck(this10542)->
-                                  FMGL(raw))->__apply(i10541);
-                    ret10543;
+                    ret10510 = (x10aux::nullCheck(this10509)->
+                                  FMGL(raw))->__apply(i10508);
+                    ret10510;
                 }))
                 ) {
                 
-                //#line 287 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10Return_c
+                //#line 294 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10Return_c
                 return index;
                 
             }
@@ -405,41 +405,41 @@ template<class TPMGL(K), class TPMGL(V)> x10_int CEntry<TPMGL(K), TPMGL(V)>::get
         }
     }
     
-    //#line 290 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10Return_c
+    //#line 297 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10Return_c
     return ((x10_int)-1);
     
 }
 
-//#line 230 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10MethodDecl_c
+//#line 240 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10MethodDecl_c
 template<class TPMGL(K), class TPMGL(V)> x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >
   CEntry<TPMGL(K), TPMGL(V)>::CEntry____CEntry__this() {
     
-    //#line 230 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10Return_c
+    //#line 240 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10Return_c
     return ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this);
     
 }
 
-//#line 230 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10MethodDecl_c
-template<class TPMGL(K), class TPMGL(V)> void CEntry<TPMGL(K), TPMGL(V)>::__fieldInitializers7705(
+//#line 240 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": x10.ast.X10MethodDecl_c
+template<class TPMGL(K), class TPMGL(V)> void CEntry<TPMGL(K), TPMGL(V)>::__fieldInitializers7689(
   ) {
     
-    //#line 230 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
+    //#line 240 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
     ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->FMGL(bitmap) =
       X10_NULL;
     
-    //#line 230 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
+    //#line 240 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
     ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->FMGL(lock) =
       x10::util::concurrent::Lock::_make();
     
-    //#line 230 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
+    //#line 240 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
     ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->FMGL(timestamp) =
       ((x10_long)0ll);
     
-    //#line 230 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
+    //#line 240 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
     ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->FMGL(isNull) =
       false;
     
-    //#line 230 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
+    //#line 240 "/home/dap2163/fall2012/coms4130/project/HopscotchHashing/CHashMap.x10": Eval of x10.ast.X10FieldAssign_c
     ((x10aux::ref<CEntry<TPMGL(K), TPMGL(V)> >)this)->FMGL(isBusy) =
       false;
 }

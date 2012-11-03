@@ -1,13 +1,14 @@
 /*
+*
 * Concurrent HashMap
 * by Daniel Perlmutter <dperlmut@gmail.com>, Joaquin Ruales <joaqo182@gmail.com>, and Wen-Hsiang Shaw <wenhshiang.Shaw@gmail.com>
-*
 *
 */
 
 import x10.io.Console;
 import x10.util.concurrent.Lock;
 import x10.util.Timer;
+import x10.util.Random;
 
 public class CHashMap[K, V] {
   private static val DEFAULT_NUM_BUCKETS = 128;
@@ -18,32 +19,29 @@ public class CHashMap[K, V] {
   //========= instance variables =========
   private var buckets:Rail[CEntry[K, V]];
   private var numSegments:Int = 1;
+  private var rand:Random = new Random(System.nanoTime());
+  private var offset:Int = 0;
   static val isDebugging = false; 
-  //var nullEntry:CEntry[K, V];
   
   //========= class methods =========
   public def this() {
     buckets = new Rail[CEntry[K,V]](DEFAULT_NUM_BUCKETS);
-    //nullEntry = new CEntry[K, V]();
-    //nullEntry.isNull = true;
   }  
+
+  //Returns the smallest positive value that is congruent to m modulo n
+  private def posMod(m:Int ,n:Int) {
+    var modVal:Int = m % n;
+    if (modVal < 0) {
+      modVal += n;
+    }
+    return modVal;
+  }
 
   //Given a key computes which bucket to put it in	
   private def getBucketIndexFromKey(key:K):Int {
-    return getBucketIndexFromKey(key, numSegments);
-  }
-
-  //See above
-  private def getBucketIndexFromKey(key:K, oldNumSegments:Int):Int {
-    var hash:Int = (key.hashCode() % buckets.size);
-    if (hash < 0) {
-      hash += buckets.size;
-    }
-    var segment:Int = hash % oldNumSegments;
-    if (segment < 0) {
-      segment += oldNumSegments;
-    }
-    val bucket = hash / oldNumSegments;
+    var hash:Int = posMod((key.hashCode() + offset), buckets.size);
+    var segment:Int = posMod(hash, numSegments);
+    val bucket<:Int = hash / numSegments;
     return DEFAULT_NUM_BUCKETS * segment + bucket;
   }
 
@@ -51,21 +49,21 @@ public class CHashMap[K, V] {
   //A bucket is also considered empty if the virtual bucket associated with its key does not indicate this bucket to be filled in its bitmap
   //The value of a bucket is irrelevant if it is empty
   private def empty(bucket:Int):Boolean {
-    return empty(bucket, buckets, numSegments);
+    return empty(bucket, buckets);
   }
 
   //See above
-  private def empty(bucket:Int, oldBuckets:Rail[CEntry[K, V]], oldNumSegments:Int):Boolean {
-    return (oldBuckets(bucket) == null || oldBuckets(bucket).isNull);
+  private def empty(bucket:Int, currentBuckets:Rail[CEntry[K, V]]):Boolean {
+    return (currentBuckets(bucket) == null || currentBuckets(bucket).isNull);
   }
 
   //Moves the value in the new bucket to the empty bucket and updates the virtual bucket's bitmap
   private def swap(newBucket:Int, emptyBucket:Int) {
     if(isDebugging) Console.OUT.print("SWAPPING " + newBucket + " AND " + emptyBucket + "...");
-    val key = buckets(newBucket).getKey();
-    val value = buckets(newBucket).getValue();
+    val key<:K = buckets(newBucket).getKey();
+    val value<:V = buckets(newBucket).getValue();
     buckets(emptyBucket) = new CEntry[K,V](key, value);
-    val virtualBucket = getBucketIndexFromKey(key);
+    val virtualBucket<:Int = getBucketIndexFromKey(key);
     buckets(virtualBucket).setBit(emptyBucket - virtualBucket, true);
     buckets(virtualBucket).setBit(newBucket - virtualBucket, false);
     buckets(newBucket).isNull = true;
@@ -89,7 +87,7 @@ public class CHashMap[K, V] {
           newBucket = index;
           break;
         } else {
-          val delta = buckets(index).getFirstEntry();
+          val delta<:Int = buckets(index).getFirstEntry();
           if (delta >= 0  && (index + delta) < emptyBucket) {
             newBucket = index + delta;
             break;
@@ -110,17 +108,16 @@ public class CHashMap[K, V] {
 
   //Adds a given key and value to the hash table
   public def add(key:K, value:V) {
-
     atomic {
-      val bucket = getBucketIndexFromKey(key);
+      val bucket<:Int = getBucketIndexFromKey(key);
       var currentBucket:Int = bucket;
       if(isDebugging) Console.OUT.println("TRYING TO ADD TO BUCKET " + bucket + " VALUE " + value);
     
     
       //Check if key is already in the HashMap, then replace value if it is
-      val actualBucketOrSomething = getActualBucket(key);
-      if(actualBucketOrSomething!=-1){
-        buckets(actualBucketOrSomething).setValue(value);
+      val actualBucket<:Int = getActualBucket(key);
+      if(actualBucket != -1){
+        buckets(actualBucket).setValue(value);
         return;
       }
 
@@ -157,10 +154,10 @@ public class CHashMap[K, V] {
 
   //Returns the actual bucket associated with a given key of -1 if the key is not in the hash map 
   public def getActualBucket(key:K):Int {
-    val virtualBucket = getBucketIndexFromKey(key);
+    val virtualBucket<:Int = getBucketIndexFromKey(key);
     for (var offset:Int = 0; offset < NEIGHBORHOOD_SIZE; offset++) {
       val testBucket = virtualBucket + offset;
-    if(testBucket>=0 && testBucket<buckets.size )
+    if(testBucket >=0 && testBucket < buckets.size )
       if (!empty(testBucket))
         if(buckets(testBucket).getKey().equals(key)) {
             return testBucket;
@@ -173,7 +170,7 @@ public class CHashMap[K, V] {
   public def get(key:K) {
     atomic {
       val actualBucket<:Int = getActualBucket(key);
-      return (actualBucket==-1)?null:buckets(actualBucket).getValue();
+      return (actualBucket == -1) ? null : buckets(actualBucket).getValue();
     }
   }
 
@@ -181,10 +178,11 @@ public class CHashMap[K, V] {
   //Returns the value associated with the removed key or null if no entry has the given key
   public def remove(key:K) {
     atomic {
-      val virtualBucket = getBucketIndexFromKey(key);
-      if(isDebugging) Console.OUT.println("TRYING TO REMOVE KEY " + key);
-        val actualBucket = getActualBucket(key);
-      if(actualBucket ==-1){
+      val virtualBucket<:Int = getBucketIndexFromKey(key);
+      if(isDebugging) 
+        Console.OUT.println("TRYING TO REMOVE KEY " + key);
+      val actualBucket<:Int = getActualBucket(key);
+      if(actualBucket == -1){
     	  if(isDebugging) Console.OUT.println("KEY NOT FOUND");
         return null;
       } else {
@@ -197,32 +195,44 @@ public class CHashMap[K, V] {
     }
   }
 
-  private def shrink() {
-    val old = buckets;
-    buckets = new Rail[CEntry[K,V]](buckets.size/RESIZE_FACTOR);
-    //TODO it might be better, instead of storing old buckets and segments here, to overload add letting it take the buckets to add too.  That way we can do something like newBuckets = new Rail.... and then do all this code without passing the old values and finally say buckets = newBuckets at the end.  The same can be done for grow.
-    val oldNumSegments = numSegments;
-    numSegments /= RESIZE_FACTOR;
-    //rehashing
-    for(var i:Int = 0; i<old.size; i++){
-      if( !empty(i, old, oldNumSegments) )
-        add(old(i).getKey(), old(i).getValue());
+  //Reshash all the from the old backing array
+  private def rehash(oldBuckets:Rail[CEntry[K,V]]) {
+    offset = rand.nextInt();
+    for(var i:Int = 0; i < oldBuckets.size; i++) {
+      if(!empty(i, oldBuckets)) {
+        add(oldBuckets(i).getKey(), oldBuckets(i).getValue());
+      }
+    }
+  }
+
+  //Shrink the backing array by the resize factor
+  private def shrink() { 
+    if(isDebugging) {
+      Console.OUT.println("SHRINKING HASH MAP");
+    }
+
+    atomic {
+      val oldBuckets<:Rail[CEntry[K,V]] = buckets;
+      buckets = new Rail[CEntry[K,V]](buckets.size / RESIZE_FACTOR);
+      numSegments /= RESIZE_FACTOR;
+      rehash(oldBuckets);
     }
   }
 	
+  //Grow the backing array by the resive factor
   private def grow() {
-    if(isDebugging) Console.OUT.println("GROWING HASH MAP");
-    val old = buckets;
-    buckets = new Rail[CEntry[K,V]](buckets.size*RESIZE_FACTOR);
-    val oldNumSegments = numSegments;
-    numSegments *= RESIZE_FACTOR;
-    if (numSegments > CHashMap.MAX_SEGMENTS) {
-      throw new RuntimeException("Too many items hash to the same value.  Increase the neighborhood size.");
+    if(isDebugging) {
+      Console.OUT.println("GROWING HASH MAP");
     }
-    //rehashing
-    for(var i:Int = 0; i< old.size; i++){
-      if( !empty(i, old, oldNumSegments) )
-        add( old(i).getKey(), old(i).getValue());
+
+    atomic {
+      val oldBuckets<:Rail[CEntry[K,V]] = buckets;
+      buckets = new Rail[CEntry[K,V]](buckets.size * RESIZE_FACTOR);
+      numSegments *= RESIZE_FACTOR;
+      if (numSegments > CHashMap.MAX_SEGMENTS) {
+        throw new RuntimeException("Too many items hash to the same value.  Increase the neighborhood size or maximum number of segments.");
+      }
+      rehash(oldBuckets);
     }
   }
 }
@@ -238,8 +248,6 @@ class CEntry[K, V] {
   public var isBusy:Boolean = false;
 
   //========= class methods =========
-  
-
   public def this(_key:K, _value:V) {
     key = _key;
     value = _value;
@@ -252,7 +260,6 @@ class CEntry[K, V] {
 
   public def getKey():K {
     if(isNull){
-      //throw exception
       throw new RuntimeException("Accessing key of a null entry");
     }
     return key;
@@ -264,7 +271,6 @@ class CEntry[K, V] {
 
   public def getValue():V {
     if(isNull){
-      //throw exception
       throw new RuntimeException("Accessing value of a null entry");
     }
     return value;
@@ -281,6 +287,7 @@ class CEntry[K, V] {
     bitmap(index) = bit; 
   }
 
+  //Returns the offset of the closest actual bucket mapped to thsi virtual bucket or -1 if nothing is mapped to this virtual bucket
   public def getFirstEntry() {
     for (var index:Int = 0; index < CHashMap.NEIGHBORHOOD_SIZE; index++) {
       if (bitmap(index)) {
