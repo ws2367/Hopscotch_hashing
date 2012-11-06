@@ -161,7 +161,7 @@ public class CHashMap[K, V] {
       if (!empty(testBucket))
         if(buckets(testBucket).getKey().equals(key)) {
             return testBucket;
-      }
+        }
     }
     return -1;
   }
@@ -177,24 +177,53 @@ public class CHashMap[K, V] {
   //Removes the entry with the given key from the hash table.
   //Returns the value associated with the removed key or null if no entry has the given key
   public def remove(key:K) {
-    atomic {
-      val virtualBucket<:Int = getBucketIndexFromKey(key);
-      if(isDebugging) 
-        Console.OUT.println("TRYING TO REMOVE KEY " + key);
-      val actualBucket<:Int = getActualBucket(key);
-      if(actualBucket == -1){
-    	  if(isDebugging) Console.OUT.println("KEY NOT FOUND");
-        return null;
-      } else {
-        buckets(virtualBucket).setBit(actualBucket - virtualBucket, false);
-        val value = buckets(actualBucket).getValue();
-        buckets(actualBucket).isNull = true;
-        if(isDebugging) Console.OUT.println("KEY REMOVED");
-        return value;
-      }
+    val virtualBucket<:Int = getBucketIndexFromKey(key);
+    
+    //No add function has new the entry yet. 
+    //Therefore, there is no such key that corresponds to this hash code(virtualBucket).
+    if(buckets(virtualBucket)==null) return null;
+    else buckets(virtualBucket).getLock();   
+     
+    if(isDebugging) 
+      Console.OUT.println("TRYING TO REMOVE KEY " + key);
+
+    val actualBucket<:Int = getActualBucket(key);
+    
+    if(actualBucket == -1){
+      if(isDebugging) Console.OUT.println("KEY NOT FOUND");
+      buckets(virtualBucket).releaseLock();
+      return null;
+    } else {
+      buckets(virtualBucket).setTimestamp();//To warn get() function that the bucket has been changed.
+      buckets(virtualBucket).setBit(actualBucket - virtualBucket, false);
+      val value = buckets(actualBucket).getValue();
+      buckets(actualBucket).isNull = true;
+      buckets(virtualBucket).releaseLock();
+      if(isDebugging) Console.OUT.println("KEY REMOVED");
+      return value;
+    }
+    
+  }
+  
+  private def getLocksOfAllNeighbors(virtualBucket:Int){
+    for (var offset:Int = 0; offset < NEIGHBORHOOD_SIZE; offset++) {
+      val testBucket = virtualBucket + offset;
+      if(testBucket >=0 && testBucket < buckets.size )
+        if (!empty(testBucket)) 
+        //We don't allow add() to add the key which is supposed to be removed while we are executing remove(). 
+        //So we acquire all the locks in the neighborhood, even if it is an empty bucket.
+        buckets(testBucket).getLock();
     }
   }
-
+  
+  private def releaseLocksOfAllNeighbors(virtualBucket:Int){
+    for (var offset:Int = 0; offset < NEIGHBORHOOD_SIZE; offset++) {
+      val testBucket = virtualBucket + offset;
+      if(testBucket >=0 && testBucket < buckets.size )
+        if (!empty(testBucket)) 
+          buckets(testBucket).releaseLock();
+    }
+  }
   //Reshash all the from the old backing array
   private def rehash(oldBuckets:Rail[CEntry[K,V]]) {
     offset = rand.nextInt();
@@ -287,7 +316,27 @@ class CEntry[K, V] {
     bitmap(index) = bit; 
   }
 
-  //Returns the offset of the closest actual bucket mapped to thsi virtual bucket or -1 if nothing is mapped to this virtual bucket
+  public def getLock(){
+    lock.lock();
+  }
+  
+  public def tryLock():Boolean{
+    return lock.tryLock();
+  }
+  
+  public def releaseLock(){
+    lock.unlock();
+  }
+  
+  public def setTimestamp(){
+    timestamp = Timer.nanoTime();
+  }
+  
+  public def getTimestamp():Long{
+    return timestamp;
+  }
+  
+  //Returns the offset of the closest actual bucket mapped to this virtual bucket or -1 if nothing is mapped to this virtual bucket
   public def getFirstEntry() {
     for (var index:Int = 0; index < CHashMap.NEIGHBORHOOD_SIZE; index++) {
       if (bitmap(index)) {
