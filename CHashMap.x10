@@ -39,8 +39,8 @@ public class CHashMap[K, V] {
 
   //Given a key computes which bucket to put it in	
   private def getBucketIndexFromKey(key:K):Int {
-    var hash:Int = posMod((key.hashCode() + offset), buckets.size);
-    var segment:Int = posMod(hash, numSegments);
+    val hash<:Int = posMod((key.hashCode() + offset), buckets.size);
+    val segment<:Int = posMod(hash, numSegments);
     val bucket<:Int = hash / numSegments;
     return DEFAULT_NUM_BUCKETS * segment + bucket;
   }
@@ -152,26 +152,28 @@ public class CHashMap[K, V] {
     }                      
   }
 
-  //Returns the actual bucket associated with a given key of -1 if the key is not in the hash map 
+  //Returns the actual bucket associated with a given key, or -1 if the key is not in the hash map 
   public def getActualBucket(key:K):Int {
     val virtualBucket<:Int = getBucketIndexFromKey(key);
     for (var offset:Int = 0; offset < NEIGHBORHOOD_SIZE; offset++) {
       val testBucket = virtualBucket + offset;
-    if(testBucket >=0 && testBucket < buckets.size )
-      if (!empty(testBucket))
-        if(buckets(testBucket).getKey().equals(key)) {
+      if(testBucket >=0 && testBucket < buckets.size ) {
+        if (!empty(testBucket)) {
+          if(buckets(testBucket).getKey().equals(key)) {
             return testBucket;
+          }
         }
+      }
     }
     return -1;
   }
 
   //Returns the value associated with the given key, or null if nonexistent
   public def get(key:K) {
-    atomic {
+    //atomic {
       val actualBucket<:Int = getActualBucket(key);
       return (actualBucket == -1) ? null : buckets(actualBucket).getValue();
-    }
+    //}
   }
 
   //Removes the entry with the given key from the hash table.
@@ -208,11 +210,12 @@ public class CHashMap[K, V] {
   private def getLocksOfAllNeighbors(virtualBucket:Int){
     for (var offset:Int = 0; offset < NEIGHBORHOOD_SIZE; offset++) {
       val testBucket = virtualBucket + offset;
-      if(testBucket >=0 && testBucket < buckets.size )
+      if(testBucket >=0 && testBucket < buckets.size ) {
         if (!empty(testBucket)) 
         //We don't allow add() to add the key which is supposed to be removed while we are executing remove(). 
         //So we acquire all the locks in the neighborhood, even if it is an empty bucket.
-        buckets(testBucket).getLock();
+          buckets(testBucket).getLock();
+      }
     }
   }
   
@@ -224,7 +227,7 @@ public class CHashMap[K, V] {
           buckets(testBucket).releaseLock();
     }
   }
-  //Reshash all the from the old backing array
+  //Rehash all the from the old backing array
   private def rehash(oldBuckets:Rail[CEntry[K,V]]) {
     offset = rand.nextInt();
     for(var i:Int = 0; i < oldBuckets.size; i++) {
