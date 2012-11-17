@@ -12,15 +12,17 @@ import x10.util.Random;
 
 public class CHashMap[K, V] {
   private static val DEFAULT_NUM_BUCKETS = 128;
+  //TODO if we can scale the hashmap to more than 10^6 elements we will need to increase this
   private static val MAX_SEGMENTS = 1000000;
   private static val RESIZE_FACTOR = 2;
+  //TODO this should be a parameter for the user to pass (and should probably be 32 by default)
   static val NEIGHBORHOOD_SIZE = 4;
 	
   //========= instance variables =========
+  //TODO this will eventually need to be changed to a DistArray for multiplace computation
   private var buckets:Rail[CEntry[K, V]];
   private var numSegments:Int = 1;
   private var rand:Random = new Random(System.nanoTime());
-  private var offset:Int = 0;
   static val isDebugging = false; 
   
   //========= class methods =========
@@ -39,7 +41,7 @@ public class CHashMap[K, V] {
 
   //Given a key computes which bucket to put it in	
   private def getBucketIndexFromKey(key:K):Int {
-    val hash<:Int = posMod((key.hashCode() + offset), buckets.size);
+    val hash<:Int = posMod(key.hashCode(), buckets.size);
     val segment<:Int = posMod(hash, numSegments);
     val bucket<:Int = hash / numSegments;
     return DEFAULT_NUM_BUCKETS * segment + bucket;
@@ -170,11 +172,9 @@ public class CHashMap[K, V] {
 
   //Returns the value associated with the given key, or null if nonexistent
   public def get(key:K) {
-    //TODO remove the atomic
-    atomic {
-      val actualBucket<:Int = getActualBucket(key);
-      return (actualBucket == -1) ? null : buckets(actualBucket).getValue();
-    }
+    //TODO we can get a speedup looking in the virtual buckets bitmap to find the actual bucket and checking the timestamp after (fast path)
+    val actualBucket<:Int = getActualBucket(key);
+    return (actualBucket == -1) ? null : buckets(actualBucket).getValue();
   }
 
   //Removes the entry with the given key from the hash table.
@@ -232,7 +232,6 @@ public class CHashMap[K, V] {
 
   //Rehash all the from the old backing array
   private def rehash(oldBuckets:Rail[CEntry[K,V]]) {
-    offset = rand.nextInt();
     for(var i:Int = 0; i < oldBuckets.size; i++) {
       if(!empty(i, oldBuckets)) {
         add(oldBuckets(i).getKey(), oldBuckets(i).getValue());
