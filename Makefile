@@ -2,7 +2,7 @@
 
 X10C=${X10_HOME}/bin/x10c++
 
-FLAGS=-VERBOSE_CHECKS=TRUE -O -NO_CHECKS -noassert -cxx-prearg -O2
+FLAGS=-VERBOSE_CHECKS=TRUE -O -noassert -cxx-prearg -O2
 ##FLAGS = 
 TARBALL=${USER}_project2.tar.gz
 

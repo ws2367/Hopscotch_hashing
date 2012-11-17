@@ -170,10 +170,11 @@ public class CHashMap[K, V] {
 
   //Returns the value associated with the given key, or null if nonexistent
   public def get(key:K) {
-    //atomic {
+    //TODO remove the atomic
+    atomic {
       val actualBucket<:Int = getActualBucket(key);
       return (actualBucket == -1) ? null : buckets(actualBucket).getValue();
-    //}
+    }
   }
 
   //Removes the entry with the given key from the hash table.
@@ -203,11 +204,11 @@ public class CHashMap[K, V] {
       buckets(virtualBucket).releaseLock();
       if(isDebugging) Console.OUT.println("KEY REMOVED");
       return value;
-    }
-    
+    } 
   }
-  
-  private def getLocksOfAllNeighbors(virtualBucket:Int){
+
+  //Accquires locks on all buckets in the neighborhood of the virtual bucket  
+  private def getLocksOfAllNeighbors(virtualBucket:Int) {
     for (var offset:Int = 0; offset < NEIGHBORHOOD_SIZE; offset++) {
       val testBucket = virtualBucket + offset;
       if(testBucket >=0 && testBucket < buckets.size ) {
@@ -219,7 +220,8 @@ public class CHashMap[K, V] {
     }
   }
   
-  private def releaseLocksOfAllNeighbors(virtualBucket:Int){
+  //Releases locks on all buckets in the neighborhood of the virtual bucket  
+  private def releaseLocksOfAllNeighbors(virtualBucket:Int) {
     for (var offset:Int = 0; offset < NEIGHBORHOOD_SIZE; offset++) {
       val testBucket = virtualBucket + offset;
       if(testBucket >=0 && testBucket < buckets.size )
@@ -227,6 +229,7 @@ public class CHashMap[K, V] {
           buckets(testBucket).releaseLock();
     }
   }
+
   //Rehash all the from the old backing array
   private def rehash(oldBuckets:Rail[CEntry[K,V]]) {
     offset = rand.nextInt();
@@ -275,6 +278,7 @@ class CEntry[K, V] {
   private var value:V;
   private var bitmap:Rail[Boolean];
   private var lock:Lock = new Lock();
+
   private var timestamp:Long;
   public var isNull:Boolean = false;
   public var isBusy:Boolean = false;
@@ -296,7 +300,7 @@ class CEntry[K, V] {
     }
     return key;
   }
-  public def setKey(_key:K){
+  public def setKey(_key:K) {
     isNull = false;
     key = _key;
   }	
@@ -307,7 +311,7 @@ class CEntry[K, V] {
     }
     return value;
   }
-  public def setValue(_value:V){
+  public def setValue(_value:V) {
     value = _value;
   }
 
@@ -319,23 +323,23 @@ class CEntry[K, V] {
     bitmap(index) = bit; 
   }
 
-  public def getLock(){
+  public def getLock() {
     lock.lock();
   }
   
-  public def tryLock():Boolean{
+  public def tryLock():Boolean {
     return lock.tryLock();
   }
   
-  public def releaseLock(){
+  public def releaseLock() {
     lock.unlock();
   }
   
-  public def setTimestamp(){
+  public def setTimestamp() {
     timestamp = Timer.nanoTime();
   }
   
-  public def getTimestamp():Long{
+  public def getTimestamp():Long {
     return timestamp;
   }
   
