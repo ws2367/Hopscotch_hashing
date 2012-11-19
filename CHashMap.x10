@@ -24,11 +24,11 @@ public class CHashMap[K, V] {
   private var rand:Random = new Random(System.nanoTime());
   private var offset:Int = 0;
   private var lastResizeTime:AtomicLong;
-  static val isDebugging = true;
+  static val isDebugging = false;
   
   //========= class methods =========
   public def this() {
-    buckets = new Rail[CEntry[K,V]](DEFAULT_NUM_BUCKETS);
+    buckets = new Rail[CEntry[K,V]](DEFAULT_NUM_BUCKETS, (i:Int)=>new CEntry[K,V]());
     lastResizeTime = new AtomicLong(Timer.nanoTime());
   }  
 
@@ -387,7 +387,7 @@ public class CHashMap[K, V] {
     	return;
     }
     
-    buckets = new Rail[CEntry[K,V]](buckets.size / RESIZE_FACTOR);
+    buckets = new Rail[CEntry[K,V]](buckets.size / RESIZE_FACTOR, (i:Int)=>new CEntry[K, V]());
     numSegments /= RESIZE_FACTOR;
     lastResizeTime.set(Timer.nanoTime());
     rehash(oldBuckets);
@@ -406,7 +406,7 @@ public class CHashMap[K, V] {
     	return;
     }
     
-    buckets = new Rail[CEntry[K,V]](buckets.size * RESIZE_FACTOR);
+    buckets = new Rail[CEntry[K,V]](buckets.size * RESIZE_FACTOR, (i:Int)=>new CEntry[K, V]());
     numSegments *= RESIZE_FACTOR;
     if (numSegments > CHashMap.MAX_SEGMENTS) {
       throw new RuntimeException("Too many items hash to the same value.  Increase the neighborhood size or maximum number of segments.");

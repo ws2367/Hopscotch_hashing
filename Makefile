@@ -7,7 +7,7 @@ FLAGS=-VERBOSE_CHECKS=TRUE -O -noassert -cxx-prearg -O2
 TARBALL=${USER}_project2.tar.gz
 
 SRCS=functests.x10 perftests.x10
-TURNIN=$(SRCS) CHashMap.x10 
+TURNIN=$(SRCS) CHashMap.x10
 
 EXES=$(SRCS:.x10=)
 
