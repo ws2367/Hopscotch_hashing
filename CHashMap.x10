@@ -79,7 +79,9 @@ public class CHashMap[K, V] {
     if(isDebugging) Console.OUT.print("SWAPPING " + newBucket + " AND " + emptyBucket + "...");
     val key<:K = buckets(newBucket).getKey();
     val value<:V = buckets(newBucket).getValue();
-    buckets(emptyBucket) = new CEntry[K,V](key, value);
+    buckets(emptyBucket).setKey(key);
+    buckets(emptyBucket).setValue(value);
+    //buckets(emptyBucket) = new CEntry[K,V](key, value);
     val virtualBucket<:Int = getBucketIndexFromKey(key);
     buckets(virtualBucket).setBit(emptyBucket - virtualBucket, true);
     buckets(virtualBucket).setBit(newBucket - virtualBucket, false);
@@ -132,9 +134,9 @@ public class CHashMap[K, V] {
     var bucket:Int = getBucketIndexFromKey(key);
     //if a resize occurred while we were acquiring the locks, try again
     while(true) {
-       if (!initialized(bucket))
-          // add new null entry
-          oldBuckets(bucket) = new CEntry[K,V]();
+      // if (!initialized(bucket))
+      //    // add new null entry
+      //    oldBuckets(bucket) = new CEntry[K,V]();
       if(isDebugging) Console.OUT.println("ACQUIRING LOCK FOR BUCKET " + bucket+"'S NEIGHBORHOOD");
       //buckets(bucket).getLock();
       //getAllLocks();
@@ -145,6 +147,7 @@ public class CHashMap[K, V] {
       } else {// there was a resize when we were acquiring our locks!
         if(isDebugging) Console.OUT.println("CONFLICT!");
         releaseLocksOfAllNeighbors(bucket, oldBuckets);
+        //releaseAllLocks();
         tempTime = Timer.nanoTime();
         oldBuckets = buckets;
         bucket = getBucketIndexFromKey(key);
@@ -162,6 +165,7 @@ public class CHashMap[K, V] {
         buckets(actualBucket).setValue(value);
         if(isDebugging) Console.OUT.println("ADDED TO " + currentBucket + " with value " + buckets(currentBucket).getValue());
         releaseLocksOfAllNeighbors(bucket);
+        //releaseAllLocks();
         return;
       }
       
@@ -173,6 +177,7 @@ public class CHashMap[K, V] {
       //Hop the empty bucket back and place the new entry in it
       if (currentBucket >= buckets.size) { //out-of-bounds case. grow takes care of atomicity and such
         releaseLocksOfAllNeighbors(bucket); //it is really important to release these locks before the resize, since resize needs to acquire all the locks
+        //releaseAllLocks();
         grow();
         add(key, value);
         return;
@@ -188,13 +193,17 @@ public class CHashMap[K, V] {
       } else { //currentBucket >= bucket + NEIGHBORHOOD_SIZE
         // we're gonna hop. we definitely need more locks! We currently hold the locks in the current bucket's neighborhood.
           val rangeMax<:Int = currentBucket;
+
           getLocksInRange(bucket+NEIGHBORHOOD_SIZE, rangeMax);
+
           //note that we need not check for resize again here, since the locks we have are prevent it from happening. It is imperative that all lock range acquisitions scan from left to right.
           // we might need to check for additions and deletions, though.
           while(currentBucket != bucket) {
             currentBucket = hop(bucket, currentBucket);
             if (currentBucket == -1) {
               releaseLocksInRange(bucket, rangeMax);
+              //releaseLocksOfAllNeighbors(bucket);
+              //releaseAllLocks();
               grow();
               add(key, value);
               return;
@@ -206,6 +215,8 @@ public class CHashMap[K, V] {
           buckets(bucket).setBit(0, true);
           if(isDebugging) Console.OUT.println("ADDED TOO " + bucket + " with value "+ buckets(bucket).getValue());
           releaseLocksInRange(bucket, rangeMax);
+         // releaseLocksOfAllNeighbors(bucket);
+          //releaseAllLocks();
       }
     //}
   }

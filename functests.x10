@@ -20,7 +20,7 @@ public class functests{
       nRepititions = Int.parse(args(2));
     }
 
-    for (var repitition:Int = 1; repitition <= nRepititions; repitition++) {
+    for (var repetition:Int = 1; repetition <= nRepititions; repetition++) {
       val rand<:Random = new Random(System.nanoTime());
 
       /******************Part 1: Deterministic tests**************/ 
@@ -51,7 +51,7 @@ public class functests{
       finish for(var i:Int=0; i < inputs.size; i++) {
         doLookup(hashTable, inputs, i, flags, true);
       }
-      Console.OUT.println("Complete deterministic tests for repititon " + repitition + " of " + nRepititions + ".");
+      Console.OUT.println("Complete deterministic tests for repetition " + repetition + " of " + nRepititions + ".");
      
       /******************Part 2: Duplicate key tests**************/ 
       val hashTable2 = new CHashMap[Int, Int]();
@@ -87,7 +87,7 @@ public class functests{
         doSequentialRemove(r, key, hashTable2, inputs2, flags2);
         doSequentialRemove(r, key, hashTable2, inputs2, flags2);
       }
-      Console.OUT.println("Complete duplicate key tests for repitition " + repitition + " of " + nRepititions + ".");
+      Console.OUT.println("Complete duplicate key tests for repetition " + repetition + " of " + nRepititions + ".");
 
       
       /******************Part 3: Non-Deterministic tests**************/ 
@@ -122,7 +122,7 @@ public class functests{
           }
         }
       }
-      Console.OUT.println("Complete non-deterministic tests for repitition " + repitition + " of " + nRepititions + ".");
+      Console.OUT.println("Complete non-deterministic tests for repetition " + repetition + " of " + nRepititions + ".");
     }
   }
 
