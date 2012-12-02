@@ -11,6 +11,7 @@ import x10.util.concurrent.AtomicLong;
 import x10.util.Timer;
 import x10.util.Random;
 import x10.util.Box;
+import x10.util.ArrayList;
 
 public class CHashMap[K, V] {
   private static val DEFAULT_NUM_BUCKETS = 128;
@@ -84,8 +85,8 @@ public class CHashMap[K, V] {
     buckets(emptyBucket).setValue(value);
     //buckets(emptyBucket) = new CEntry[K,V](key, value);
     val virtualBucket<:Int = getBucketIndexFromKey(key);
-    buckets(virtualBucket).setBit(emptyBucket - virtualBucket, true);
-    buckets(virtualBucket).setBit(newBucket - virtualBucket, false);
+    buckets(virtualBucket).addBit(emptyBucket - virtualBucket);
+    buckets(virtualBucket).removeBit(newBucket - virtualBucket);
     buckets(newBucket).isNull = true;
     if(isDebugging) Console.OUT.print("SWAP DONE ");
   }
@@ -185,7 +186,7 @@ public class CHashMap[K, V] {
       } else if (currentBucket < bucket + NEIGHBORHOOD_SIZE) { // item conveniently fits in our neighborhood, we don't need more locks
         buckets(currentBucket).setKey(key);
         buckets(currentBucket).setValue(value);
-        buckets(bucket).setBit(currentBucket - bucket, true);
+        buckets(bucket).addBit(currentBucket - bucket);
         if(isDebugging) Console.OUT.println("ADDED TO " + currentBucket + " with value " + buckets(currentBucket).getValue());
         //buckets(bucket).releaseLock();
         releaseLocksOfAllNeighbors(bucket); //linearization point
@@ -213,7 +214,7 @@ public class CHashMap[K, V] {
           }
           buckets(bucket).setKey(key);
           buckets(bucket).setValue(value);
-          buckets(bucket).setBit(0, true);
+          buckets(bucket).addBit(0);
           if(isDebugging) Console.OUT.println("ADDED TOO " + bucket + " with value "+ buckets(bucket).getValue());
           releaseLocksInRange(bucket, rangeMax);
          // releaseLocksOfAllNeighbors(bucket);
@@ -226,9 +227,10 @@ public class CHashMap[K, V] {
   public def tryGetActualBucket(key:K):Int {
     val virtualBucket<:Int = getBucketIndexFromKey(key);
     val bitmap = buckets(virtualBucket).getBitmap();
-    for (var offset:Int = 0; offset < NEIGHBORHOOD_SIZE; offset++) {
+    for (var index:Int = 0; index < bitmap.size(); index++) {
+      val offset = bitmap.get(index);
       val testBucket = virtualBucket + offset;
-      if(testBucket >=0 && testBucket < buckets.size && bitmap(offset) && !empty(testBucket) && buckets(testBucket).getKey().equals(key)) {
+      if(testBucket >=0 && testBucket < buckets.size && !empty(testBucket) && buckets(testBucket).getKey().equals(key)) {
         return testBucket;
       }
     }
@@ -306,7 +308,7 @@ public class CHashMap[K, V] {
       return null;
     } else {
       buckets(virtualBucket).setTimestamp();//To warn get() function that the bucket has been changed.
-      buckets(virtualBucket).setBit(actualBucket - virtualBucket, false);
+      buckets(virtualBucket).removeBit(actualBucket - virtualBucket);
       val value = buckets(actualBucket).getValue();
       buckets(actualBucket).isNull = true;
       if(isDebugging) Console.OUT.println("RELEASING LOCK FOR BUCKET " + virtualBucket);
@@ -453,7 +455,7 @@ class CEntry[K, V] {
   //========= instance variables =========
   private var key:Box[K];
   private var value:Box[V];
-  private var bitmap:Rail[Boolean];
+  private var bitmap:ArrayList[Int];
   private var lock:Lock;
 
   private var timestamp:Long;
@@ -464,7 +466,8 @@ class CEntry[K, V] {
   public def this() {
     key = null;
     value = null;
-    bitmap = new Rail[Boolean](CHashMap.NEIGHBORHOOD_SIZE);
+    //Ideally the bitmap should be a sparse min heap but x10 doesn't have built in heaps so we use an array list
+    bitmap = new ArrayList[Int]();
     lock = new Lock();
     timestamp = Timer.nanoTime();
     isNull = true;
@@ -476,10 +479,7 @@ class CEntry[K, V] {
   public def this(_key:K, _value:V, _lock:Lock) {
     key = new Box[K](_key);
     value = new Box[V](_value);
-    bitmap = new Rail[Boolean](CHashMap.NEIGHBORHOOD_SIZE);
-    for (var index:Int = 0; index < CHashMap.NEIGHBORHOOD_SIZE; index++) {
-      bitmap(index) = false;
-    }
+    bitmap = new ArrayList[Int]();
     lock = _lock;
     timestamp = Timer.nanoTime();
   }
@@ -505,12 +505,16 @@ class CEntry[K, V] {
     value = new Box[V](_value);
   }
 
-  public def getBitmap():Rail[Boolean] {
+  public def getBitmap():ArrayList[Int] {
     return bitmap;
   }
 
-  public def setBit(index:Int, bit:Boolean) {
-    bitmap(index) = bit;
+  public def addBit(offset:Int) {
+    bitmap.add(offset);
+  }
+
+  public def removeBit(offset:Int) {
+    bitmap.remove(offset);
   }
 
   public def getLock() {
@@ -539,11 +543,17 @@ class CEntry[K, V] {
   
   //Returns the offset of the closest actual bucket mapped to this virtual bucket or -1 if nothing is mapped to this virtual bucket
   public def getFirstEntry() {
-    for (var index:Int = 0; index < CHashMap.NEIGHBORHOOD_SIZE; index++) {
-      if (bitmap(index)) {
-        return index;
+    if (bitmap.isEmpty()) {
+      return -1;
+    } else {
+      var first:Int = bitmap.get(0);
+      for (var index:Int = 1; index < bitmap.size(); index++) {
+        val current = bitmap.get(index);
+        if (current < first) {
+          first = current;
+        }
       }
+      return first;
     }
-    return -1;
   }
 }
