@@ -17,6 +17,7 @@ public class CHashMap[K, V] {
   //TODO if we can scale the hashmap to more than 10^6 elements we will need to increase this
   private static val MAX_SEGMENTS = 1000000;
   private static val RESIZE_FACTOR = 2;
+  private static val MAX_OPTIMISTIC_TRIES = 2;
   //TODO this should be a parameter for the user to pass (and should probably be 32 by default)
   static val NEIGHBORHOOD_SIZE = 4;
 	
@@ -221,17 +222,26 @@ public class CHashMap[K, V] {
     //}
   }
 
+  //Attempts to get the actual bucket associated with the given key.  Fails if an add or remove alters the bitmap of the virtual bucket associated with the given key
+  public def tryGetActualBucket(key:K):Int {
+    val virtualBucket<:Int = getBucketIndexFromKey(key);
+    val bitmap = buckets(virtualBucket).getBitmap();
+    for (var offset:Int = 0; offset < NEIGHBORHOOD_SIZE; offset++) {
+      val testBucket = virtualBucket + offset;
+      if(testBucket >=0 && testBucket < buckets.size && bitmap(offset) && !empty(testBucket) && buckets(testBucket).getKey().equals(key)) {
+        return testBucket;
+      }
+    }
+    return -1;
+  }
+
   //Returns the actual bucket associated with a given key, or -1 if the key is not in the hash map 
   public def getActualBucket(key:K):Int {
     val virtualBucket<:Int = getBucketIndexFromKey(key);
     for (var offset:Int = 0; offset < NEIGHBORHOOD_SIZE; offset++) {
       val testBucket = virtualBucket + offset;
-      if(testBucket >=0 && testBucket < buckets.size ) {
-        if (!empty(testBucket)) {
-          if(buckets(testBucket).getKey().equals(key)) {
-            return testBucket;
-          }
-        }
+      if(testBucket >=0 && testBucket < buckets.size && !empty(testBucket) && buckets(testBucket).getKey().equals(key)) {
+        return testBucket;
       }
     }
     return -1;
@@ -239,8 +249,20 @@ public class CHashMap[K, V] {
 
   //Returns the value associated with the given key, or null if nonexistent
   public def get(key:K) {
-    //TODO we can get a speedup looking in the virtual buckets bitmap to find the actual bucket and checking the timestamp after (fast path)
-    val actualBucket<:Int = getActualBucket(key);
+    val virtualBucket = getBucketIndexFromKey(key);
+    var actualBucket:Int = 0;
+    var tryCounter:Int = 0;
+    var timestamp:Long = 0;
+    //Optimistically try to do lookup assuming nothing else interferes ("fast path")
+    do {
+      timestamp = buckets(virtualBucket).getTimestamp();
+      actualBucket = tryGetActualBucket(key);
+      tryCounter++;
+    } while (timestamp != buckets(virtualBucket).getTimestamp() && tryCounter < MAX_OPTIMISTIC_TRIES);
+    if (timestamp != buckets(virtualBucket).getTimestamp()) {
+      //Optimistic attempts failed so we must try look up pessimistically ("slow path") 
+      actualBucket = getActualBucket(key);
+    }
     return (actualBucket == -1) ? null : buckets(actualBucket).getValue();
   }
 
