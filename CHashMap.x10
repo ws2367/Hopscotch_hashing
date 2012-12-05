@@ -14,13 +14,12 @@ import x10.util.Box;
 import x10.util.ArrayList;
 
 public class CHashMap[K, V] {
-  private static val DEFAULT_NUM_BUCKETS = 128;
+  private var DEFAULT_NUM_BUCKETS:Int;
   //TODO if we can scale the hashmap to more than 10^6 elements we will need to increase this
   private static val MAX_SEGMENTS = 1000000;
   private static val RESIZE_FACTOR = 2;
   private static val MAX_OPTIMISTIC_TRIES = 2;
-  //TODO this should be a parameter for the user to pass (and should probably be 32 by default)
-  static val NEIGHBORHOOD_SIZE = 4;
+  private var NEIGHBORHOOD_SIZE:Int;
 	
   //========= instance variables =========
   //TODO this will eventually need to be changed to a DistArray for multiplace computation
@@ -32,9 +31,12 @@ public class CHashMap[K, V] {
   static val isDebugging = false;
   
   //========= class methods =========
-  public def this() {
+  public def this(numNeighbors:Int, numBuckets:Int) {
+    NEIGHBORHOOD_SIZE   = numNeighbors;
+    DEFAULT_NUM_BUCKETS = numBuckets;
     buckets = new Rail[CEntry[K,V]](DEFAULT_NUM_BUCKETS, (i:Int)=>new CEntry[K,V]());
     lastResizeTime = new AtomicLong(Timer.nanoTime());
+    
   }  
 
   //Returns the smallest positive value that is congruent to m modulo n
@@ -63,7 +65,7 @@ public class CHashMap[K, V] {
 
   //See above
   private def empty(bucket:Int, currentBuckets:Rail[CEntry[K, V]]):Boolean {
-    return (currentBuckets(bucket) == null || currentBuckets(bucket).isNull);
+    return (currentBuckets(bucket) == null || currentBuckets(bucket).getKey() == null);
   }
   
   //A bucket is considered initialized if it is a non-null reference
@@ -79,15 +81,15 @@ public class CHashMap[K, V] {
   //Moves the value in the new bucket to the empty bucket and updates the virtual bucket's bitmap
   private def swap(newBucket:Int, emptyBucket:Int) {
     if(isDebugging) Console.OUT.print("SWAPPING " + newBucket + " AND " + emptyBucket + "...");
-    val key<:K = buckets(newBucket).getKey();
-    val value<:V = buckets(newBucket).getValue();
+    val key<:K = buckets(newBucket).getKey()();
+    val value = buckets(newBucket).getValue()();
     buckets(emptyBucket).setKey(key);
     buckets(emptyBucket).setValue(value);
     //buckets(emptyBucket) = new CEntry[K,V](key, value);
     val virtualBucket<:Int = getBucketIndexFromKey(key);
     buckets(virtualBucket).addBit(emptyBucket - virtualBucket);
     buckets(virtualBucket).removeBit(newBucket - virtualBucket);
-    buckets(newBucket).isNull = true;
+    buckets(newBucket).setKeyNull();
     if(isDebugging) Console.OUT.print("SWAP DONE ");
   }
 
@@ -97,7 +99,7 @@ public class CHashMap[K, V] {
   //Returns the index of the new empty bucket of -1 if the empty bucket could not be hopped back
   private def hop(desiredBucket:Int, emptyBucket:Int):Int {
     if(isDebugging) Console.OUT.print("HOPPING " + emptyBucket + " BACK TO " + desiredBucket + "...");
-    if (emptyBucket < getBucketIndexFromKey(buckets(desiredBucket).getKey()) + NEIGHBORHOOD_SIZE) {
+    if (emptyBucket < getBucketIndexFromKey(buckets(desiredBucket).getKey()()) + NEIGHBORHOOD_SIZE) {
       swap(desiredBucket, emptyBucket);
       if(isDebugging) Console.OUT.println("HOP DONE");
       return desiredBucket;
@@ -136,12 +138,7 @@ public class CHashMap[K, V] {
     var bucket:Int = getBucketIndexFromKey(key);
     //if a resize occurred while we were acquiring the locks, try again
     while(true) {
-      // if (!initialized(bucket))
-      //    // add new null entry
-      //    oldBuckets(bucket) = new CEntry[K,V]();
       if(isDebugging) Console.OUT.println("ACQUIRING LOCK FOR BUCKET " + bucket+"'S NEIGHBORHOOD");
-      //buckets(bucket).getLock();
-      //getAllLocks();
       getLocksOfAllNeighbors(bucket);
       
       if(lastResizeTime.get()<tempTime/* && buckets(bucket).getTimestamp()<tempTime (I don't think this is necessary to check, since our acquisition of the lock guarantees we do what we need to when others are already done.) */) {
@@ -149,7 +146,6 @@ public class CHashMap[K, V] {
       } else {// there was a resize when we were acquiring our locks!
         if(isDebugging) Console.OUT.println("CONFLICT!");
         releaseLocksOfAllNeighbors(bucket, oldBuckets);
-        //releaseAllLocks();
         tempTime = Timer.nanoTime();
         oldBuckets = buckets;
         bucket = getBucketIndexFromKey(key);
@@ -165,7 +161,7 @@ public class CHashMap[K, V] {
       if(actualBucket != -1){//if key already exists
         //replace its value
         buckets(actualBucket).setValue(value);
-        if(isDebugging) Console.OUT.println("ADDED TO " + currentBucket + " with value " + buckets(currentBucket).getValue());
+        if(isDebugging) Console.OUT.println("ADDED TO " + currentBucket + " with value " + buckets(currentBucket).getValue()());
         releaseLocksOfAllNeighbors(bucket);
         //releaseAllLocks();
         return;
@@ -187,7 +183,7 @@ public class CHashMap[K, V] {
         buckets(currentBucket).setKey(key);
         buckets(currentBucket).setValue(value);
         buckets(bucket).addBit(currentBucket - bucket);
-        if(isDebugging) Console.OUT.println("ADDED TO " + currentBucket + " with value " + buckets(currentBucket).getValue());
+        if(isDebugging) Console.OUT.println("ADDED TO " + currentBucket + " with value " + (buckets(currentBucket).getValue())());
         //buckets(bucket).releaseLock();
         releaseLocksOfAllNeighbors(bucket); //linearization point
         //releaseAllLocks();
@@ -215,12 +211,9 @@ public class CHashMap[K, V] {
           buckets(bucket).setKey(key);
           buckets(bucket).setValue(value);
           buckets(bucket).addBit(0);
-          if(isDebugging) Console.OUT.println("ADDED TOO " + bucket + " with value "+ buckets(bucket).getValue());
+          if(isDebugging) Console.OUT.println("ADDED TOO " + bucket + " with value "+ (buckets(bucket).getValue())());
           releaseLocksInRange(bucket, rangeMax);
-         // releaseLocksOfAllNeighbors(bucket);
-          //releaseAllLocks();
       }
-    //}
   }
 
   //Attempts to get the actual bucket associated with the given key.  Fails if an add or remove alters the bitmap of the virtual bucket associated with the given key
@@ -230,7 +223,7 @@ public class CHashMap[K, V] {
     for (var index:Int = 0; index < bitmap.size(); index++) {
       val offset = bitmap.get(index);
       val testBucket = virtualBucket + offset;
-      if(testBucket >=0 && testBucket < buckets.size && !empty(testBucket) && buckets(testBucket).getKey().equals(key)) {
+      if(testBucket >=0 && testBucket < buckets.size && !empty(testBucket) && buckets(testBucket).getKey()().equals(key)) {
         return testBucket;
       }
     }
@@ -242,7 +235,7 @@ public class CHashMap[K, V] {
     val virtualBucket<:Int = getBucketIndexFromKey(key);
     for (var offset:Int = 0; offset < NEIGHBORHOOD_SIZE; offset++) {
       val testBucket = virtualBucket + offset;
-      if(testBucket >=0 && testBucket < buckets.size && !empty(testBucket) && buckets(testBucket).getKey().equals(key)) {
+      if(testBucket >=0 && testBucket < buckets.size && !empty(testBucket) && buckets(testBucket).getKey()().equals(key)) {
         return testBucket;
       }
     }
@@ -265,14 +258,12 @@ public class CHashMap[K, V] {
       //Optimistic attempts failed so we must try look up pessimistically ("slow path") 
       actualBucket = getActualBucket(key);
     }
-    return (actualBucket == -1) ? null : buckets(actualBucket).getValue();
+    return (actualBucket == -1) ? null : (buckets(actualBucket).getValue())();
   }
 
   //Removes the entry with the given key from the hash table.
   //Returns the value associated with the removed key or null if no entry has the given key
-  public def remove(key:K) {
-    //atomic {
-    
+  public def remove(key:K) {    
     var tempTime:Long = Timer.nanoTime();
     var oldBuckets:Rail[CEntry[K,V]] = buckets;
     var virtualBucket:Int = getBucketIndexFromKey(key);
@@ -282,8 +273,6 @@ public class CHashMap[K, V] {
     while(true) {
       if(isDebugging) Console.OUT.println("ACQUIRING LOCK FOR BUCKET " + virtualBucket);
       oldBuckets(virtualBucket).getLock();
-      //getAllLocks();
-      //getLocksOfAllNeighbors(bucket);
       
       if(lastResizeTime.get()<tempTime/* && buckets(bucket).getTimestamp()<tempTime (I don't think this is necessary to check, since our acquisition of the lock guarantees we do what we need to when others are already done.) */) {
         break;
@@ -309,14 +298,13 @@ public class CHashMap[K, V] {
     } else {
       buckets(virtualBucket).setTimestamp();//To warn get() function that the bucket has been changed.
       buckets(virtualBucket).removeBit(actualBucket - virtualBucket);
-      val value = buckets(actualBucket).getValue();
-      buckets(actualBucket).isNull = true;
+      val value = buckets(actualBucket).getValue()();
+      buckets(actualBucket).setKeyNull();
       if(isDebugging) Console.OUT.println("RELEASING LOCK FOR BUCKET " + virtualBucket);
       buckets(virtualBucket).releaseLock();
       if(isDebugging) Console.OUT.println("KEY REMOVED");
       return value;
     } 
-    //}
   }
 
   
@@ -395,7 +383,7 @@ public class CHashMap[K, V] {
   private def rehash(oldBuckets:Rail[CEntry[K,V]]) {
     for(var i:Int = 0; i < oldBuckets.size; i++) {
       if(!empty(i, oldBuckets)) {
-        add(oldBuckets(i).getKey(), oldBuckets(i).getValue());
+        add(oldBuckets(i).getKey()(), oldBuckets(i).getValue()());
       }
     }
     lastResizeTime.set(Timer.nanoTime());
@@ -459,7 +447,6 @@ class CEntry[K, V] {
   private var lock:Lock;
 
   private var timestamp:Long;
-  public var isNull:Boolean = false;
   public var isBusy:Boolean = false;
 
   //========= class methods =========
@@ -470,7 +457,6 @@ class CEntry[K, V] {
     bitmap = new ArrayList[Int]();
     lock = new Lock();
     timestamp = Timer.nanoTime();
-    isNull = true;
   }
   public def this(_key:K, _value:V) {
     this(_key, _value, new Lock());
@@ -484,22 +470,17 @@ class CEntry[K, V] {
     timestamp = Timer.nanoTime();
   }
 
-  public def getKey():K {
-    if(isNull){
-      throw new RuntimeException("Accessing key of a null entry");
-    }
-    return key();
+  public def getKey():Box[K]{
+    return key;
   }
   public def setKey(_key:K) {
-    isNull = false;
     key = new Box[K](_key);
   }	
-
-  public def getValue():V {
-    if(isNull){
-      throw new RuntimeException("Accessing value of a null entry");
-    }
-    return value();
+  public def setKeyNull() {
+    key = null;
+  }	  
+  public def getValue():Box[V] {
+    return value;
   }
   public def setValue(_value:V) {
     value = new Box[V](_value);
