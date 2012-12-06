@@ -14,26 +14,27 @@ import x10.util.Box;
 import x10.util.ArrayList;
 
 public class CHashMap[K, V] {
-  private var DEFAULT_NUM_BUCKETS:Int;
   //TODO if we can scale the hashmap to more than 10^6 elements we will need to increase this
-  private static val MAX_SEGMENTS = 1000000;
-  private static val RESIZE_FACTOR = 2;
+  private static val MAX_SEGMENTS         = 1000000;
+  private static val RESIZE_FACTOR        = 2;
   private static val MAX_OPTIMISTIC_TRIES = 2;
-  private var NEIGHBORHOOD_SIZE:Int;
-	
+  private static val LOAD_FACTOR          = 0.75;
+  private static val isDebugging = false;
+  
   //========= instance variables =========
   //TODO this will eventually need to be changed to a DistArray for multiplace computation
   private var buckets:Rail[CEntry[K, V]];
   private var numSegments:Int = 1;
-  private var rand:Random = new Random(System.nanoTime());
-  private var offset:Int = 0;
+  private var rand:Random     = new Random(System.nanoTime());
+  private var offset:Int      = 0;
   private var lastResizeTime:AtomicLong;
-  static val isDebugging = false;
+  private var DEFAULT_NUM_BUCKETS:Int;
+  private var NEIGHBORHOOD_SIZE:Int;
   
   //========= class methods =========
-  public def this(numNeighbors:Int, numBuckets:Int) {
+  public def this(numNeighbors:Int, numElements:Int) {
     NEIGHBORHOOD_SIZE   = numNeighbors;
-    DEFAULT_NUM_BUCKETS = numBuckets;
+    DEFAULT_NUM_BUCKETS = (numElements as Double/LOAD_FACTOR) as Int;
     buckets = new Rail[CEntry[K,V]](DEFAULT_NUM_BUCKETS, (i:Int)=>new CEntry[K,V]());
     lastResizeTime = new AtomicLong(Timer.nanoTime());
     

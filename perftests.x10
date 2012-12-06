@@ -19,11 +19,11 @@ public class perftests {
     
     // get all important input variables
     val nOperations<:Int = Int.parse(args(0));
-    val nAdds<:Int = (nOperations*Double.parse(args(1))) as Int; 
-    val nRemoves<:Int = (nOperations*Double.parse(args(2))) as Int;
-    val nLookups<:Int = nOperations-nAdds-nRemoves;
-    val NUM_NEIGHBORS = 32;
-    val NUM_BUCKETS   = 128;
+    val nAdds<:Int       = (nOperations*Double.parse(args(1))) as Int; 
+    val nRemoves<:Int    = (nOperations*Double.parse(args(2))) as Int;
+    val nLookups<:Int    = nOperations-nAdds-nRemoves;
+    val nNeighbors<:Int  = 32;
+    val nElements<:Int   = 128;
     
     val seed<:Long = System.nanoTime();
     
@@ -33,7 +33,7 @@ public class perftests {
     var rand:Random = new Random(seed);
     	
     	
-    val hashMap = new CHashMap[Int,Int](NUM_NEIGHBORS, NUM_BUCKETS);
+    val hashMap = new CHashMap[Int,Int](nNeighbors, nElements);
     	
     var keys:Rail[Int] = new Rail[Int](nAdds);
     var values:Rail[Int] = new Rail[Int](nAdds);

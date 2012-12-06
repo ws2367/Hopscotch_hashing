@@ -16,8 +16,8 @@ public class functests{
     val nAdds<:Int       = Int.parse(args(0)); 
     val nRemoves<:Int    = Int.parse(args(1));
     var nRepititions:Int = 1;
-    val NUM_NEIGHBORS    = 32;
-    val NUM_BUCKETS      = 128;
+    val nNeighbors<:Int  = 32;
+    val nElements<:Int   = 128;
     if (argc == 3) {
       nRepititions = Int.parse(args(2));
     }
@@ -26,7 +26,7 @@ public class functests{
       val rand<:Random = new Random(System.nanoTime());
 
       /******************Part 1: Deterministic tests**************/ 
-      val hashTable = new CHashMap[Int, Int](NUM_NEIGHBORS, NUM_BUCKETS);
+      val hashTable = new CHashMap[Int, Int](nNeighbors, nElements);
     
       // inputs is an array that holds the key-value pairs we'll add to our hash table
       val inputs<:Rail[Pair[Int, Int]] = new Rail[Pair[Int, Int]](nAdds);
@@ -56,7 +56,7 @@ public class functests{
       Console.OUT.println("Complete deterministic tests for repetition " + repetition + " of " + nRepititions + ".");
      
       /******************Part 2: Duplicate key tests**************/ 
-      val hashTable2 = new CHashMap[Int, Int](NUM_NEIGHBORS, NUM_BUCKETS);
+      val hashTable2 = new CHashMap[Int, Int](nNeighbors, nElements);
 
       // inputs is an array that holds the key-value pairs we'll add to our hash table
       val inputs2<:Rail[Pair[Int, Int]] = new Rail[Pair[Int, Int]](nAdds);
@@ -93,7 +93,7 @@ public class functests{
 
       
       /******************Part 3: Non-Deterministic tests**************/ 
-      val hashTable3 = new CHashMap[Int, Int](NUM_NEIGHBORS, NUM_BUCKETS);
+      val hashTable3 = new CHashMap[Int, Int](nNeighbors, nElements);
 
       // inputs is an array that holds the key-value pairs we'll add to our hash table
       val inputs3<:Rail[Pair[Int, Int]] = new Rail[Pair[Int, Int]](nAdds);
