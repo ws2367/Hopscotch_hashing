@@ -6,8 +6,6 @@ import x10.util.Pair;
 import x10.util.Timer;
 import x10.util.HashMap;
 
-
-
 public class perftests {
   public static def main(args: Array[String]) {
         
@@ -24,17 +22,28 @@ public class perftests {
     val nRemoves<:Int    = (nOperations*Double.parse(args(3))) as Int;
     val nLookups<:Int    = nOperations-nAdds-nRemoves;
     val nNeighbors<:Int  = 32;
-    val nElements<:Int   = 128;
     
+    var start:Long;
+    var end:Long;
+    var addTime:Long;
+    var lookupTime:Long;
+    var deleteTime:Long;
+    var lookupTime2:Long;
+
     val seed<:Long = System.nanoTime();
+
+    var rand:Random; 
     
-    //================================Testing for our own CHashMap==============
-    var rand:Random = new Random(seed);
-    	
-    val hashMap = new CHashMap[Int,Int](nNeighbors, nElements);
-    	
     var keys:Rail[Int] = new Rail[Int](nAdds);
     var values:Rail[Int] = new Rail[Int](nAdds);
+    
+    var beenRemoved:Array[Boolean] = new Array[Boolean](keys.size, false);
+    var controlBeenRemoved:Array[Boolean] = new Array[Boolean](keys.size, false);
+
+    //================================Testing for our own CHashMap==============
+    rand = new Random(seed);
+    	
+    val hashMap = new CHashMap[Int,Int](nNeighbors, nAdds);
     	
     //Initialize random keys-values pairs to be inserted into our Hashmap
     // All keys and values will be integers
@@ -43,22 +52,15 @@ public class perftests {
       keys(i) = rand.nextInt();
       values(i) = rand.nextInt();
     }
-    
-    var start:Long;
-    var end:Long;
-    var addTime:Long;
-    var lookupTime:Long;
-    var deleteTime:Long;
-    var lookupTime2:Long;
-    
+   
     //=====================Insertion Test=======================
     start = Timer.milliTime();
     finish {
       for (var threadNum:Int = 0; threadNum < nThreads; threadNum++) {
+        val offset = threadNum * (nAdds / nThreads);
         async {
           for(var i:Int = 0; i < nAdds / nThreads; i++){
-    //      for(var i:Int = 0; i < nAdds; i++){
-            hashMap.add(keys(i), values(i));
+            hashMap.add(keys(i + offset), values(i + offset));
           }
         }
       }
@@ -81,25 +83,21 @@ public class perftests {
     }
     end = Timer.milliTime();
     lookupTime = end-start;
-    
-    var beenRemoved:Array[Boolean] = new Array[Boolean](keys.size, false);
-    var controlBeenRemoved:Array[Boolean] = new Array[Boolean](keys.size, false);
-    
+       
     //=====================Deletion Test=======================
     start = Timer.milliTime();
-    //finish {
-    //  for (var threadNum:Int = 0; threadNum < nThreads; threadNum++) {
-    //    async {
-    //      for (var i:Int = 0; i < nRemoves / nThreads; i++){
-          for (var i:Int = 0; i < nRemoves; i++){
+    finish {
+      for (var threadNum:Int = 0; threadNum < nThreads; threadNum++) {
+        async {
+          for (var i:Int = 0; i < nRemoves / nThreads; i++){
             val r = rand.nextInt(keys.size);
             val key = keys(r);
             hashMap.remove(key);
             beenRemoved(r) = true;
           }
-    //    }
-    //  }
-    //}
+        }
+      }
+    }
     end = Timer.milliTime();
     deleteTime = end-start;
     
@@ -109,7 +107,7 @@ public class perftests {
       for (var threadNum:Int = 0; threadNum < nThreads; threadNum++) {
         async {
           for(var i:Int=0; i < nLookups / nThreads; i++){
-    	    val r = rand.nextInt(keys.size);
+  	    val r = rand.nextInt(keys.size);
     	    val key = keys(r);
     	    hashMap.get(key);
           }
@@ -124,7 +122,7 @@ public class perftests {
     Console.OUT.println(lookupTime+"ms for "+nLookups+" random lookups before any deletion.");
     Console.OUT.println(deleteTime+"ms for "+nRemoves+" random deletions.");
     Console.OUT.println(lookupTime2+"ms for "+nLookups+" random lookups after deletions.");
-    
+
     //================================Testing for Built-in HashMap==============
     rand = new Random(seed);
     	
@@ -135,14 +133,14 @@ public class perftests {
     	
     //Initialize random keys-values pairs to be inserted into our Hashmap
     // All keys and values will be integers
-    for(var i:Int = 0; i<nAdds; i++){
+    for(var i:Int = 0; i < nAdds; i++){
       keys(i) = rand.nextInt();
       values(i) = rand.nextInt();
     }
     
     //=====================Insertion Test=======================
     start = Timer.milliTime();
-    for(var i:Int = 0; i<nAdds; i++){
+    for(var i:Int = 0; i < nAdds; i++){
       oldHashMap.put(keys(i), values(i));
     }
     end = Timer.milliTime();
@@ -150,7 +148,7 @@ public class perftests {
     
     //=====================Lookup Test=======================
     start = Timer.milliTime();
-    for(var i:Int=0; i<nLookups; i++ ){
+    for(var i:Int=0; i < nLookups; i++ ){
       val r = rand.nextInt(keys.size);
       val key = keys(r);
       oldHashMap.get(key);
@@ -163,7 +161,7 @@ public class perftests {
     
     //=====================Deletion Test=======================
     start = Timer.milliTime();
-    for (var i:Int = 0; i<nRemoves; i++){
+    for (var i:Int = 0; i < nRemoves; i++){
       val r = rand.nextInt(keys.size);
       val key = keys(r);
       oldHashMap.remove(key);
@@ -174,7 +172,7 @@ public class perftests {
     
     //=====================Lookup Test Once More=======================
     start = Timer.milliTime();
-    for(var i:Int=0; i<nLookups; i++ ){
+    for(var i:Int=0; i < nLookups; i++ ){
     	val r = rand.nextInt(keys.size);
     	val key = keys(r);
     	oldHashMap.get(key);
