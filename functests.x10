@@ -1,3 +1,4 @@
+
 import CHashMap;
 import x10.util.Random;
 import x10.io.Console;

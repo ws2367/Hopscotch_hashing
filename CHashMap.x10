@@ -1,9 +1,16 @@
-/*
+/******************************************************************************
 *
-* Concurrent HashMap
+* Concurrent Hopscotch HashMap
+*
+* Course Project, COMS 4130, Parallel Programming, Fall 2012
+*    
+* Columbia University
+*
+* Ref: Hopscotch Hashing  Maurice Herlihy, Nir Shavit and Moran Tzafrir
+*
 * by Daniel Perlmutter <dperlmut@gmail.com>, Joaquin Ruales <joaqo182@gmail.com>, and Wen-Hsiang Shaw <wenhshiang.Shaw@gmail.com>
 *
-*/
+*******************************************************************************/
 
 import x10.io.Console;
 import x10.util.concurrent.Lock;
@@ -14,11 +21,20 @@ import x10.util.Box;
 import x10.util.ArrayList;
 
 public class CHashMap[K, V] {
+
+  /*========= static variables =========
+  MAX_SEGMENTS:         The maximum number of segments. See the comments in grow()
+  RESIZE_FACTOR:        The ratio of size of the original hash table and the desired size of the resized hash
+                        table, whether it is growing or shrinking
+  MAX_OPTIMISTIC_TRIES: The maximum number of tries that lookup conducts the optimistic search(search through the hop info).
+                        After the maximum number of optimistic tries, it conducts pessimistic search.
+  LOAD_FACTOR:          The initial ratio of number of elements that will be added over the hash table size
+  ======================================*/
   private static val MAX_SEGMENTS         = 1000000;
   private static val RESIZE_FACTOR        = 2;
   private static val MAX_OPTIMISTIC_TRIES = 2;
   private static val LOAD_FACTOR          = 0.1;
-  private static val isDebugging = false;
+  private static val isDebugging          = false;
   
   //========= instance variables =========
   private var buckets:Rail[CEntry[K, V]];
@@ -37,21 +53,20 @@ public class CHashMap[K, V] {
     //lastResizeTime = new AtomicLong(Timer.nanoTime());
   }  
 
-  //Returns the smallest positive value that is congruent to m modulo n
-  private def posMod(m:Int ,n:Int) {
-    var modVal:Int = m % n;
-    if (modVal < 0) {
-      modVal += n;
-    }
-    return modVal;
-  }
-
-  //Given a key computes which bucket to put it in	
+  //Given a key computes which bucket to put it in
   private def getBucketIndexFromKey(key:K):Int {
     val hash<:Int = posMod(key.hashCode(), buckets.size);
     val segment<:Int = posMod(hash, numSegments);
     val bucket<:Int = hash / numSegments;
     return DEFAULT_NUM_BUCKETS * segment + bucket;
+  }
+
+  private def posMod(m:Int, n:Int) {
+    var modVal:Int = m % n;
+    if (modVal < 0) {
+      modVal += n;
+    }
+    return modVal;
   }
 
   //A bucket is considered empty if it has no entry or the entry has a null key
@@ -63,7 +78,33 @@ public class CHashMap[K, V] {
 
   //See above
   private def empty(bucket:Int, currentBuckets:Rail[CEntry[K, V]]):Boolean {
-    return (currentBuckets(bucket) == null || currentBuckets(bucket).getKey() == null);
+    return (currentBuckets(bucket) == null || currentBuckets(bucket).getKey() == null || currentBuckets(bucket).getKey()() == null);
+  }
+
+  //Attempts to get the actual bucket associated with the given key.  Fails if an add or remove alters the bitmap of the virtual bucket associated with the given key
+  public def tryGetActualBucket(key:K):Int {
+    val virtualBucket<:Int = getBucketIndexFromKey(key);
+    val bitmap = buckets(virtualBucket).getBitmap();
+    for (var index:Int = 0; index < bitmap.size(); index++) {
+      val offset = bitmap.get(index);
+      val testBucket = virtualBucket + offset;
+      if(testBucket >=0 && testBucket < buckets.size && !empty(testBucket) && buckets(testBucket).getKey()().equals(key)) {
+        return testBucket;
+      }
+    }
+    return -1;
+  }
+
+  //Returns the actual bucket associated with a given key, or -1 if the key is not in the hash map 
+  public def getActualBucket(key:K):Int {
+    val virtualBucket<:Int = getBucketIndexFromKey(key);
+    for (var offset:Int = 0; offset < NEIGHBORHOOD_SIZE; offset++) {
+      val testBucket = virtualBucket + offset;
+      if(testBucket >=0 && testBucket < buckets.size && !empty(testBucket) && buckets(testBucket).getKey()().equals(key)) {
+        return testBucket;
+      }
+    }
+    return -1;
   }
   
   //A bucket is considered initialized if it is a non-null reference
@@ -131,8 +172,9 @@ public class CHashMap[K, V] {
       getLocksOfAllNeighbors(bucket);
       
       /*if(lastResizeTime.get() < tempTime) {
+      if(lastResizeTime.get()<tempTime) {
         break;
-      } else {// there was a resize when we were acquiring our locks!
+      } else {// there was a resize when we were acquiring our locks
         if(isDebugging) Console.OUT.println("CONFLICT!");
         releaseLocksOfAllNeighbors(bucket, oldBuckets);
         tempTime = Timer.nanoTime();
@@ -211,33 +253,7 @@ public class CHashMap[K, V] {
       }
     }
   }
-
-  //Attempts to get the actual bucket associated with the given key.  Fails if an add or remove alters the bitmap of the virtual bucket associated with the given key
-  public def tryGetActualBucket(key:K):Int {
-    val virtualBucket<:Int = getBucketIndexFromKey(key);
-    val bitmap = buckets(virtualBucket).getBitmap();
-    for (var index:Int = 0; index < bitmap.size(); index++) {
-      val offset = bitmap.get(index);
-      val testBucket = virtualBucket + offset;
-      if(testBucket >=0 && testBucket < buckets.size && !empty(testBucket) && buckets(testBucket).getKey()().equals(key)) {
-        return testBucket;
-      }
-    }
-    return -1;
-  }
-
-  //Returns the actual bucket associated with a given key, or -1 if the key is not in the hash map 
-  public def getActualBucket(key:K):Int {
-    val virtualBucket<:Int = getBucketIndexFromKey(key);
-    for (var offset:Int = 0; offset < NEIGHBORHOOD_SIZE; offset++) {
-      val testBucket = virtualBucket + offset;
-      if(testBucket >=0 && testBucket < buckets.size && !empty(testBucket) && buckets(testBucket).getKey()().equals(key)) {
-        return testBucket;
-      }
-    }
-    return -1;
-  }
-
+    
   //Returns the value associated with the given key, or null if nonexistent
   public def get(key:K) {
     val virtualBucket = getBucketIndexFromKey(key);
@@ -274,7 +290,7 @@ public class CHashMap[K, V] {
       
       /*if(lastResizeTime.get()<tempTime) {
         break;
-      } else {// there was a resize when we were acquiring our locks!
+      } else {// there was a resize when we were acquiring our locks
         if(isDebugging) Console.OUT.println("CONFLICT! TRYING AGAIN");
         oldBuckets(virtualBucket).releaseLock();
         tempTime = Timer.nanoTime();
@@ -320,6 +336,7 @@ public class CHashMap[K, V] {
   private def releaseAllLocks() {
     releaseAllLocks(buckets);
   }
+  //Release all the initialized allocks in the hash table
   private def releaseAllLocks(_buckets:Rail[CEntry[K, V]]) {
     for (var i:Int = 0; i < _buckets.size; i++) {
         if (initialized(i, _buckets)) 
@@ -344,6 +361,7 @@ public class CHashMap[K, V] {
   private def releaseLocksInRange(rangeMin:Int, rangeMax:Int) {
     releaseLocksInRange(rangeMin, rangeMax, buckets);
   }
+  
   private def releaseLocksInRange(rangeMin:Int, rangeMax:Int, _buckets:Rail[CEntry[K, V]]) {
     for (var testBucket:Int = rangeMin; testBucket <= rangeMax; testBucket++) {
       if(testBucket >=0 && testBucket < _buckets.size) {
@@ -394,8 +412,8 @@ public class CHashMap[K, V] {
     for(var i:Int = 0; i < oldBuckets.size; i++) {
       if(!empty(i, oldBuckets)) {
       //When we release the old locks (which we'll do now),
-    	//if an insertion or a deletion was waiting on the lock,
-    	  //it will now run. TODO: make sure to compare timestamps in remove and add to avoid adding/reming to/from the wrong place after resize
+      //if an insertion or a deletion was waiting on the lock,
+      //it will now run.
         oldBuckets(i).releaseLock();
       }
     }
@@ -428,7 +446,7 @@ public class CHashMap[K, V] {
     val tempTime:Long = Timer.nanoTime();
     val oldBuckets<:Rail[CEntry[K,V]] = buckets;
     getAllLocks();
-    if(lastResizeTime.get()>tempTime) { //someone did our work for us. Nice!
+    if(lastResizeTime.get()>tempTime) { //someone did our work for us. 
     	releaseAllLocks(oldBuckets);
     	return;
     }
@@ -451,7 +469,6 @@ class CEntry[K, V] {
   private var lock:Lock;
 
   private var timestamp:Long;
-  public var isBusy:Boolean = false;
 
   //========= class methods =========
   public def this() {
