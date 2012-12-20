@@ -3,30 +3,32 @@ import x10.util.Random;
 import x10.io.Console;
 import x10.util.Pair;
 import x10.util.HashMap;
+import x10.util.Timer;
 
 public class functests{
 
   public static def main(args:Rail[String]){
 
     val argc:Int = args.size;
-    if(argc < 2 || argc > 3){
-      Console.ERR.println("Usage: functests <num adds> <num removes> (<num repitions>)");
+    if(argc < 3 || argc > 4){
+      Console.ERR.println("Usage: functests <num threads> <num adds> <num removes> (<num repitions>)");
       return;
     }
-    val nAdds<:Int       = Int.parse(args(0)); 
-    val nRemoves<:Int    = Int.parse(args(1));
+    val nThreads<:Int    = Int.parse(args(0)); 
+    val nAdds<:Int       = Int.parse(args(1)); 
+    val nRemoves<:Int    = Int.parse(args(2));
     var nRepititions:Int = 1;
-    val nNeighbors<:Int  = 32;
-    val nElements<:Int   = 128;
-    if (argc == 3) {
-      nRepititions = Int.parse(args(2));
+    val nNeighbors<:Int  = 16;
+    if (argc == 4) {
+      nRepititions = Int.parse(args(3));
     }
+    var startTime:Long = 0;
 
     for (var repetition:Int = 1; repetition <= nRepititions; repetition++) {
       val rand<:Random = new Random(System.nanoTime());
 
       /******************Part 1: Deterministic tests**************/ 
-      val hashTable = new CHashMap[Int, Int](nNeighbors, nElements);
+      val hashTable = new CHashMap[Int, Int](nNeighbors, nAdds);
     
       // inputs is an array that holds the key-value pairs we'll add to our hash table
       val inputs<:Rail[Pair[Int, Int]] = new Rail[Pair[Int, Int]](nAdds);
@@ -35,6 +37,7 @@ public class functests{
       val uniqueKeys = new HashMap[Int, Int]();
  
       // add values to our CHashMap while at the same time populating the inputs array with those same key-value pairs
+      
       finish for(var i:Int = 0; i < nAdds; i++) {
         doRandomAdd(rand, hashTable, inputs, i, uniqueKeys);
       }
@@ -56,7 +59,7 @@ public class functests{
       Console.OUT.println("Complete deterministic tests for repetition " + repetition + " of " + nRepititions + ".");
      
       /******************Part 2: Duplicate key tests**************/ 
-      val hashTable2 = new CHashMap[Int, Int](nNeighbors, nElements);
+      val hashTable2 = new CHashMap[Int, Int](nNeighbors, nAdds);
 
       // inputs is an array that holds the key-value pairs we'll add to our hash table
       val inputs2<:Rail[Pair[Int, Int]] = new Rail[Pair[Int, Int]](nAdds);
@@ -93,7 +96,7 @@ public class functests{
 
       
       /******************Part 3: Non-Deterministic tests**************/ 
-      val hashTable3 = new CHashMap[Int, Int](nNeighbors, nElements);
+      val hashTable3 = new CHashMap[Int, Int](nNeighbors, nAdds);
 
       // inputs is an array that holds the key-value pairs we'll add to our hash table
       val inputs3<:Rail[Pair[Int, Int]] = new Rail[Pair[Int, Int]](nAdds);
@@ -102,6 +105,7 @@ public class functests{
       val uniqueKeys3 = new HashMap[Int, Int]();
       val flags3 = new Rail[Boolean](inputs.size, false);
 
+      
       finish {
         async {
           for(var i:Int = 0; i < nAdds; i++) {
@@ -125,6 +129,63 @@ public class functests{
         }
       }
       Console.OUT.println("Complete non-deterministic tests for repetition " + repetition + " of " + nRepititions + ".");
+      
+      /******************Part 4: Performance tests**************/ 
+      val hashTable4 = new CHashMap[Int, Int](nNeighbors, nAdds);
+    
+      // inputs is an array that holds the key-value pairs we'll add to our hash table
+      val inputs4<:Rail[Pair[Int, Int]] = new Rail[Pair[Int, Int]](nAdds);
+
+      //===================insertion==========================
+      startTime = Timer.nanoTime(); 
+      finish {
+        for (var thread:Int = 0; thread < nThreads; thread++) { 
+          val offset = nAdds / nThreads * thread;
+          async {
+            for(var i:Int = 0; i < nAdds / nThreads; i++) {
+              var thisKey:Int = rand.nextInt();
+              val thisValue = rand.nextInt();
+              inputs4(offset + i) = new Pair[Int, Int](thisKey, thisValue);
+              hashTable4.add(thisKey, thisValue);
+            }
+          }
+        }
+      }
+      val addTime = Timer.nanoTime() - startTime;
+      Console.OUT.println(addTime + "ns for " + nAdds + " adds.");
+
+      //===================removal==========================
+      startTime = Timer.nanoTime(); 
+      finish {
+        for (var thread:Int = 0; thread < nThreads; thread++) { 
+          async {
+            for (var i:Int = 0; i < nRemoves / nThreads; i++) {
+              val r = rand.nextInt(inputs.size);
+              val key = inputs4(r).first;
+              hashTable4.remove(key);
+            }
+          }
+        }
+      }
+      val removeTime = Timer.nanoTime() - startTime;
+      Console.OUT.println(removeTime + "ns for " + nRemoves + " removes.");
+
+      //=========================lookup========================
+      startTime = Timer.nanoTime(); 
+      finish {
+        for (var thread:Int = 0; thread < nThreads; thread++) { 
+          val offset = nAdds / nThreads * thread;
+          async {
+            for (var i:Int = 0; i < nAdds / nThreads; i++) {
+              hashTable4.get(inputs(offset + i).first);
+            }
+          }
+        }
+      }
+      val lookupTime = Timer.nanoTime() - startTime;
+      Console.OUT.println(lookupTime + "ns for " + nAdds + " lookups.");
+
+      Console.OUT.println("Complete performance tests for repetition " + repetition + " of " + nRepititions + ".");
     }
   }
 

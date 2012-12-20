@@ -14,15 +14,13 @@ import x10.util.Box;
 import x10.util.ArrayList;
 
 public class CHashMap[K, V] {
-  //TODO if we can scale the hashmap to more than 10^6 elements we will need to increase this
   private static val MAX_SEGMENTS         = 1000000;
   private static val RESIZE_FACTOR        = 2;
   private static val MAX_OPTIMISTIC_TRIES = 2;
-  private static val LOAD_FACTOR          = 0.75;
+  private static val LOAD_FACTOR          = 0.1;
   private static val isDebugging = false;
   
   //========= instance variables =========
-  //TODO this will eventually need to be changed to a DistArray for multiplace computation
   private var buckets:Rail[CEntry[K, V]];
   private var numSegments:Int = 1;
   private var rand:Random     = new Random(System.nanoTime());
@@ -36,8 +34,7 @@ public class CHashMap[K, V] {
     NEIGHBORHOOD_SIZE   = numNeighbors;
     DEFAULT_NUM_BUCKETS = (numElements as Double/LOAD_FACTOR) as Int;
     buckets = new Rail[CEntry[K,V]](DEFAULT_NUM_BUCKETS, (i:Int)=>new CEntry[K,V]());
-    lastResizeTime = new AtomicLong(Timer.nanoTime());
-    
+    //lastResizeTime = new AtomicLong(Timer.nanoTime());
   }  
 
   //Returns the smallest positive value that is congruent to m modulo n
@@ -86,63 +83,54 @@ public class CHashMap[K, V] {
     val value = buckets(newBucket).getValue()();
     buckets(emptyBucket).setKey(key);
     buckets(emptyBucket).setValue(value);
+    buckets(emptyBucket).setTimestamp();
     //buckets(emptyBucket) = new CEntry[K,V](key, value);
     val virtualBucket<:Int = getBucketIndexFromKey(key);
     buckets(virtualBucket).addBit(emptyBucket - virtualBucket);
     buckets(virtualBucket).removeBit(newBucket - virtualBucket);
+    buckets(virtualBucket).setTimestamp();
     buckets(newBucket).setKeyNull();
     if(isDebugging) Console.OUT.print("SWAP DONE ");
   }
 
   //Hops the empty bucket back to be closer to the desired bucket
   //Returns the index of the new empty bucket of -1 if the empty bucket could not be hopped back
-  //Hops the empty bucket back to be closer to the desired bucket
-  //Returns the index of the new empty bucket of -1 if the empty bucket could not be hopped back
   private def hop(desiredBucket:Int, emptyBucket:Int):Int {
     if(isDebugging) Console.OUT.print("HOPPING " + emptyBucket + " BACK TO " + desiredBucket + "...");
-    if (emptyBucket < getBucketIndexFromKey(buckets(desiredBucket).getKey()()) + NEIGHBORHOOD_SIZE) {
-      swap(desiredBucket, emptyBucket);
-      if(isDebugging) Console.OUT.println("HOP DONE");
-      return desiredBucket;
-    } else {
-      var newBucket:Int = emptyBucket;
-      for (var index:Int = emptyBucket - NEIGHBORHOOD_SIZE + 1; index < emptyBucket; index++) {
-        if (empty(index)) {
-          newBucket = index;
-          break;
-        } else {
-          val delta<:Int = buckets(index).getFirstEntry();
-          if (delta >= 0  && (index + delta) < emptyBucket) {
-            newBucket = index + delta;
-            break;
-          }
-        }
-      } 
-      if (newBucket < emptyBucket) { 
-        if (!empty(newBucket)) {
-          swap(newBucket, emptyBucket);
-        }
-        return newBucket;
+    var newBucket:Int = emptyBucket;
+    for (var index:Int = Math.max(emptyBucket - NEIGHBORHOOD_SIZE + 1, desiredBucket); index < emptyBucket; index++) {
+      if (empty(index)) {
+        newBucket = index;
+        break;
       } else {
-        if(isDebugging) Console.OUT.println("FAILED");
-        return -1;
+        val delta<:Int = buckets(index).getFirstEntry();
+        if (delta >= 0  && (index + delta) < emptyBucket) {
+          newBucket = index + delta;
+          break;
+        }
+      }
+    } 
+    if (newBucket < emptyBucket) { 
+      if (!empty(newBucket)) {
+        swap(newBucket, emptyBucket);
       }
     }
+    if(isDebugging) Console.OUT.println("HOP DONE");
+    return newBucket;
   }
 
   //Adds a given key and value to the hash table
   public def add(key:K, value:V) {
-    //atomic {
     var currentBucket:Int;
     var tempTime:Long = Timer.nanoTime();
     var oldBuckets:Rail[CEntry[K,V]] = buckets;
     var bucket:Int = getBucketIndexFromKey(key);
     //if a resize occurred while we were acquiring the locks, try again
-    while(true) {
-      if(isDebugging) Console.OUT.println("ACQUIRING LOCK FOR BUCKET " + bucket+"'S NEIGHBORHOOD");
+    //while(true) {
+      if(isDebugging) Console.OUT.println("ACQUIRING LOCKS FOR BUCKET " + bucket + "'S NEIGHBORHOOD");
       getLocksOfAllNeighbors(bucket);
       
-      if(lastResizeTime.get()<tempTime/* && buckets(bucket).getTimestamp()<tempTime (I don't think this is necessary to check, since our acquisition of the lock guarantees we do what we need to when others are already done.) */) {
+      /*if(lastResizeTime.get() < tempTime) {
         break;
       } else {// there was a resize when we were acquiring our locks!
         if(isDebugging) Console.OUT.println("CONFLICT!");
@@ -150,71 +138,78 @@ public class CHashMap[K, V] {
         tempTime = Timer.nanoTime();
         oldBuckets = buckets;
         bucket = getBucketIndexFromKey(key);
-      }
-    }
+      }*/
+    //}
     
     //at this point we have the locks and all is well
-      if(isDebugging) Console.OUT.println("TRYING TO ADD TO BUCKET " + bucket + " VALUE " + value);
+    if(isDebugging) Console.OUT.println("TRYING TO ADD TO BUCKET " + bucket + " VALUE " + value);
       currentBucket = bucket;
       
-      //Check if key is already in the HashMap, then replace value if it is
-      val actualBucket<:Int = getActualBucket(key);
-      if(actualBucket != -1){//if key already exists
-        //replace its value
-        buckets(actualBucket).setValue(value);
-        if(isDebugging) Console.OUT.println("ADDED TO " + currentBucket + " with value " + buckets(currentBucket).getValue()());
-        releaseLocksOfAllNeighbors(bucket);
-        //releaseAllLocks();
-        return;
-      }
+    //Check if key is already in the HashMap, then replace value if it is
+    val actualBucket<:Int = tryGetActualBucket(key);
+    if(actualBucket != -1) {
+      //the key already exists so replace its value
+      buckets(actualBucket).setValue(value);
+      buckets(actualBucket).setTimestamp();
+      if(isDebugging) Console.OUT.println("ADDED TO " + currentBucket + " with value " + buckets(currentBucket).getValue()());
+      releaseLocksOfAllNeighbors(bucket);
+      //releaseAllLocks();
+      return;
+    }
       
-      //Find an empty bucket
-      while (currentBucket < buckets.size && !empty(currentBucket)) {
-        currentBucket++;
-      }
+    //Find an empty bucket
+    while (currentBucket < buckets.size && !empty(currentBucket)) {
+      currentBucket++;
+    }
+   
+    //Hop the empty bucket back and place the new entry in it
+    if (currentBucket >= buckets.size) { //out-of-bounds case. grow takes care of atomicity and such
+      /* releaseLocksOfAllNeighbors(bucket); //it is really important to release these locks before the resize, since resize needs to acquire all the locks
+      //releaseAllLocks();
+      grow();
+      add(key, value);
+      return;
+      if(isDebugging) Console.OUT.println("ADDED TO " + currentBucket + " with value " + (buckets(currentBucket).getValue())());
+      //buckets(bucket).releaseLock();
+      releaseLocksOfAllNeighbors(bucket); //linearization point
+      //releaseAllLocks();*/
+      throw new RuntimeException("Refusing to grow.");
+    } else {
+      // we're gonna hop so we need more locks
+      // we currently hold the locks in the current bucket's neighborhood.
+      val rangeMax<:Int = currentBucket;
 
-      //Hop the empty bucket back and place the new entry in it
-      if (currentBucket >= buckets.size) { //out-of-bounds case. grow takes care of atomicity and such
-        releaseLocksOfAllNeighbors(bucket); //it is really important to release these locks before the resize, since resize needs to acquire all the locks
-        //releaseAllLocks();
-        grow();
-        add(key, value);
-        return;
-      } else if (currentBucket < bucket + NEIGHBORHOOD_SIZE) { // item conveniently fits in our neighborhood, we don't need more locks
-        buckets(currentBucket).setKey(key);
-        buckets(currentBucket).setValue(value);
-        buckets(bucket).addBit(currentBucket - bucket);
-        if(isDebugging) Console.OUT.println("ADDED TO " + currentBucket + " with value " + (buckets(currentBucket).getValue())());
-        //buckets(bucket).releaseLock();
-        releaseLocksOfAllNeighbors(bucket); //linearization point
-        //releaseAllLocks();
-        return;
-      } else { //currentBucket >= bucket + NEIGHBORHOOD_SIZE
-        // we're gonna hop. we definitely need more locks! We currently hold the locks in the current bucket's neighborhood.
-          val rangeMax<:Int = currentBucket;
+      getLocksInRange(bucket+NEIGHBORHOOD_SIZE, rangeMax);
 
-          getLocksInRange(bucket+NEIGHBORHOOD_SIZE, rangeMax);
-
-          //note that we need not check for resize again here, since the locks we have are prevent it from happening. It is imperative that all lock range acquisitions scan from left to right.
-          // we might need to check for additions and deletions, though.
-          while(currentBucket != bucket) {
-            currentBucket = hop(bucket, currentBucket);
-            if (currentBucket == -1) {
-              releaseLocksInRange(bucket, rangeMax);
-              //releaseLocksOfAllNeighbors(bucket);
-              //releaseAllLocks();
-              grow();
-              add(key, value);
-              return;
-              //currentBucket = bucket;
-            }
+      //note that we need not check for resize again here, since the locks we have are prevent it from happening. It is imperative that all lock range acquisitions scan from left to right.
+      // we might need to check for additions and deletions, though.
+      while (true) {
+        val newBucket = hop(bucket, currentBucket);
+        if (newBucket == currentBucket) {
+          if (newBucket < bucket + NEIGHBORHOOD_SIZE) {
+            buckets(newBucket).setKey(key);
+            buckets(newBucket).setValue(value);
+            buckets(newBucket).setTimestamp();
+            buckets(bucket).addBit(newBucket - bucket);
+            buckets(bucket).setTimestamp();
+            if(isDebugging) Console.OUT.println("ADDED TO " + bucket + " with value "+ (buckets(bucket).getValue())());
+            releaseLocksInRange(bucket, Math.max(rangeMax, bucket + NEIGHBORHOOD_SIZE - 1));
+            return;
+          } else {
+            throw new RuntimeException("Couldn't hop.");
+            /*releaseLocksInRange(bucket, rangeMax);
+            //releaseLocksOfAllNeighbors(bucket);
+            //releaseAllLocks();
+            grow();
+            add(key, value);
+            return;
+            //currentBucket = bucket;
+            */
           }
-          buckets(bucket).setKey(key);
-          buckets(bucket).setValue(value);
-          buckets(bucket).addBit(0);
-          if(isDebugging) Console.OUT.println("ADDED TOO " + bucket + " with value "+ (buckets(bucket).getValue())());
-          releaseLocksInRange(bucket, rangeMax);
+        }
+        currentBucket = newBucket;
       }
+    }
   }
 
   //Attempts to get the actual bucket associated with the given key.  Fails if an add or remove alters the bitmap of the virtual bucket associated with the given key
@@ -268,14 +263,16 @@ public class CHashMap[K, V] {
     var tempTime:Long = Timer.nanoTime();
     var oldBuckets:Rail[CEntry[K,V]] = buckets;
     var virtualBucket:Int = getBucketIndexFromKey(key);
-    if(oldBuckets(virtualBucket)==null) return null;
+    if(oldBuckets(virtualBucket) == null) {
+      return null;
+    }
     
     //if a resize occurred while we were acquiring the lock, try again
-    while(true) {
+    //while(true) {
       if(isDebugging) Console.OUT.println("ACQUIRING LOCK FOR BUCKET " + virtualBucket);
       oldBuckets(virtualBucket).getLock();
       
-      if(lastResizeTime.get()<tempTime/* && buckets(bucket).getTimestamp()<tempTime (I don't think this is necessary to check, since our acquisition of the lock guarantees we do what we need to when others are already done.) */) {
+      /*if(lastResizeTime.get()<tempTime) {
         break;
       } else {// there was a resize when we were acquiring our locks!
         if(isDebugging) Console.OUT.println("CONFLICT! TRYING AGAIN");
@@ -284,8 +281,8 @@ public class CHashMap[K, V] {
         oldBuckets = buckets;
         virtualBucket = getBucketIndexFromKey(key);
         if(oldBuckets(virtualBucket)==null) return null;
-      }
-    }
+      }*/
+    //}
      
     if(isDebugging) 
       Console.OUT.println("TRYING TO REMOVE KEY " + key);
@@ -297,19 +294,18 @@ public class CHashMap[K, V] {
       buckets(virtualBucket).releaseLock();
       return null;
     } else {
-      buckets(virtualBucket).setTimestamp();//To warn get() function that the bucket has been changed.
       buckets(virtualBucket).removeBit(actualBucket - virtualBucket);
       val value = buckets(actualBucket).getValue()();
       buckets(actualBucket).setKeyNull();
+      buckets(virtualBucket).setTimestamp();
       if(isDebugging) Console.OUT.println("RELEASING LOCK FOR BUCKET " + virtualBucket);
       buckets(virtualBucket).releaseLock();
       if(isDebugging) Console.OUT.println("KEY REMOVED");
       return value;
     } 
   }
-
   
-  // Acquire every single lock. useful when doing a hashmap-wide operation such as grow, shrink, or swap
+  // Acquire every single lock. Useful when doing a hashmap-wide operation such as grow
   private def getAllLocks() {
     for (var i:Int = 0; i < buckets.size; i++) {
         if (!initialized(i)){
@@ -319,6 +315,8 @@ public class CHashMap[K, V] {
           buckets(i).getLock();
     }
   }
+
+  //Release every single lock
   private def releaseAllLocks() {
     releaseAllLocks(buckets);
   }
@@ -332,36 +330,39 @@ public class CHashMap[K, V] {
   //Acquires locks on all buckets in the given range  
   private def getLocksInRange(rangeMin:Int, rangeMax:Int) {
     for (var testBucket:Int = rangeMin; testBucket <= rangeMax; testBucket++) {
-      if(testBucket >=0 && testBucket < buckets.size ) {
-        if (!initialized(testBucket)){
+      if(testBucket >=0 && testBucket < buckets.size) {
+        //if (!initialized(testBucket)){
           // add new null entry
-          buckets(testBucket) = new CEntry[K,V]();
-        }
+        //  buckets(testBucket) = new CEntry[K,V]();
+        //}
         buckets(testBucket).getLock();
       }
     }
   }
+
+  //Release all locks in a given range
   private def releaseLocksInRange(rangeMin:Int, rangeMax:Int) {
     releaseLocksInRange(rangeMin, rangeMax, buckets);
   }
   private def releaseLocksInRange(rangeMin:Int, rangeMax:Int, _buckets:Rail[CEntry[K, V]]) {
     for (var testBucket:Int = rangeMin; testBucket <= rangeMax; testBucket++) {
-      if(testBucket >=0 && testBucket < _buckets.size )
-        if (initialized(testBucket, _buckets)) 
+      if(testBucket >=0 && testBucket < _buckets.size) {
+        if (initialized(testBucket, _buckets)) { 
           _buckets(testBucket).releaseLock();
+        }
+      }
     }
   }
-  
   
   //Acquires locks on all buckets in the neighborhood of the virtual bucket  
   private def getLocksOfAllNeighbors(virtualBucket:Int) {
     for (var offset:Int = 0; offset < NEIGHBORHOOD_SIZE; offset++) {
       val testBucket = virtualBucket + offset;
       if(testBucket >=0 && testBucket < buckets.size ) {
-        if (!initialized(testBucket)){
+        //if (!initialized(testBucket)){
           // add new null entry
-          buckets(testBucket) = new CEntry[K,V]();
-        }
+          //buckets(testBucket) = new CEntry[K,V]();
+        //}
         buckets(testBucket).getLock();
       }
     }
@@ -369,14 +370,16 @@ public class CHashMap[K, V] {
   
   //Releases locks on all buckets in the neighborhood of the virtual bucket
   private def releaseLocksOfAllNeighbors(virtualBucket:Int) {
-    atomic releaseLocksOfAllNeighbors(virtualBucket, buckets);
+    releaseLocksOfAllNeighbors(virtualBucket, buckets);
   }
   private def releaseLocksOfAllNeighbors(virtualBucket:Int, _buckets:Rail[CEntry[K, V]]) {
     for (var offset:Int = 0; offset < NEIGHBORHOOD_SIZE; offset++) {
       val testBucket = virtualBucket + offset;
-      if(testBucket >=0 && testBucket < _buckets.size )
-        if (initialized(testBucket, _buckets)) 
+      if(testBucket >=0 && testBucket < _buckets.size ) {
+        if (initialized(testBucket, _buckets)) {
           _buckets(testBucket).releaseLock();
+        }
+      }
     }
   }
 
